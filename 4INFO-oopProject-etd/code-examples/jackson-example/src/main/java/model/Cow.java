@@ -21,12 +21,19 @@ public class Cow extends Animal {
 		if(!(o instanceof Cow)) {
 			return false;
 		}
+		if(!super.equals(o)) {
+			return false;
+		}
 		final Cow cow = (Cow) o;
 		return horns == cow.horns;
 	}
 
+	public boolean isHorns() {
+		return horns;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(horns);
+		return Objects.hash(super.hashCode(), horns);
 	}
 }

@@ -1,6 +1,12 @@
 package diaballik.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import diaballik.model.game.GameManager;
+import diaballik.model.game.GameManagerBuilder;
+import diaballik.model.game.TypePartie;
+import diaballik.model.joueur.JoueurHumain;
+import diaballik.model.plateau.PlateauEnemyAmongUs;
+import diaballik.restWrapper.InitGameClasses;
 import diaballik.serialization.DiabalikJacksonProvider;
 import java.awt.Color;
 import java.io.IOException;
@@ -14,8 +20,13 @@ public class TestMarshalling {
 	static Stream<Object> getInstancesToMarshall() {
 //		final Player p1 = new Player(); //TODO to update
 //		etc.
+		GameManager gm = new GameManager();
+		JoueurHumain j1 = new JoueurHumain(Color.RED,"ringo",gm);
+		JoueurHumain j2 = new JoueurHumain(Color.BLACK,"start",gm);
+		InitGameClasses initGameClasses = new InitGameClasses(j1,j2,new PlateauEnemyAmongUs(), TypePartie.TYPE_J_VS_J);
 
-		return Stream.of(Color.RED); //p1); // Add other marshallable elements
+        GameManager gmA = new GameManagerBuilder().typePartie(initGameClasses.getTypePartie()).joueur1(initGameClasses.getJ1()).joueur2(initGameClasses.getJ2()).plateau(initGameClasses.getPlateau()).build();
+        return Stream.of(initGameClasses,gmA); //p1); // Add other marshallable elements
 	}
 
 	@ParameterizedTest
@@ -25,6 +36,8 @@ public class TestMarshalling {
 		final String serializedObject = mapper.writeValueAsString(objectToMarshall);
 		System.out.println(serializedObject);
 		final Object readValue = mapper.readValue(serializedObject, objectToMarshall.getClass());
-		assertEquals(objectToMarshall, readValue);
+        final String serializedObject2 = mapper.writeValueAsString(readValue);
+        System.out.println(serializedObject2);
+        assertEquals(objectToMarshall, readValue);
 	}
 }

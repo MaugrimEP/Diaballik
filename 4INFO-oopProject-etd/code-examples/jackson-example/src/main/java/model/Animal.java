@@ -41,6 +41,10 @@ public abstract class Animal {
 		return Objects.equals(name, animal.name);
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(name);
