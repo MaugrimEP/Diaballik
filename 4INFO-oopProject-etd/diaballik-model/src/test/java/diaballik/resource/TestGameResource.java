@@ -73,5 +73,27 @@ public class TestGameResource {
 
         GameManager gameManager = new GameManager(new AutomateGameManager(gm, new EtatJ1vsJ2()), new PlateauEnemyAmongUs(), null, j1, j2);
         Assertions.assertEquals(gameManager, gmres);
+
+    }
+
+    @Test
+    void testInitGameWithInconsistentsPlayers(final Client client, final URI baseUri) {
+		/*Matiere mat = target("calendar/mat").request().post(Entity.xml(new Matiere("DDR",1900))).readEntity(Matiere.class);
+		Matiere matWithNewName = target("calendar/mat/"+mat.getId()+"/DDR ACE").request().put(Entity.text("")).readEntity(Matiere.class);
+		assertEquals("DDR ACE", matWithNewName.getName());
+		assertEquals(mat.getId(), matWithNewName.getId());*/
+        client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
+        GameManager gm = new GameManager();
+        JoueurHumain j1 = new JoueurHumain(Color.RED,"ringo",gm);
+        JoueurHumain j2 = new JoueurHumain(Color.RED,"start",gm);//same color
+        InitGameClasses initGameClasses = new InitGameClasses(j1,j2,new PlateauEnemyAmongUs(), TypePartie.TYPE_J_VS_J);
+        final Response res = client.
+                target(baseUri).
+                path("game/init").
+                request().
+                put(Entity.json(initGameClasses));
+        GameManager gmres  = res.readEntity(GameManager.class);
+        Assertions.assertNull(gmres);
+
     }
 }
