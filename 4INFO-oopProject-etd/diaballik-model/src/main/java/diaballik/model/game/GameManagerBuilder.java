@@ -33,6 +33,9 @@ public class GameManagerBuilder {
 	}
 
 	public GameManager build() {
+        gm.getJoueur1().setGameManager(gm);
+        gm.getJoueur2().setGameManager(gm);
+        gm.getAutomate().setGameManager(gm);
 		return gm;
 	}
 }

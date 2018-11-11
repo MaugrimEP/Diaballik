@@ -30,7 +30,7 @@ import java.util.Objects;
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Plateau {
     @JsonDeserialize(keyUsing = MapCoordonneeDeserializer.class)
-    private Map<Coordonnee, Case> lescases;
+    protected Map<Coordonnee, Case> lescases;
 
     @JsonCreator
     protected Plateau(@JsonProperty("lescases") final Map<Coordonnee, Case> lescases) {
@@ -39,9 +39,6 @@ public class Plateau {
 
     public Plateau() {
         lescases = new HashMap<>();
-        final Case aCase = new Case();
-        aCase.setBalle(new Balle(new JoueurHumain(Color.RED, "red", new GameManager())));
-        lescases.put(new Coordonnee(1, 2), aCase);
     }
 
     public void move(final Coordonnee c1, final Coordonnee c2) {

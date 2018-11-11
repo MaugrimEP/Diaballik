@@ -3,6 +3,7 @@ package diaballik.model.joueur;
 import com.fasterxml.jackson.annotation.*;
 import diaballik.model.game.GameManager;
 
+import javax.validation.constraints.NotNull;
 import java.awt.Color;
 import java.util.Objects;
 
@@ -21,15 +22,23 @@ public abstract class Joueur {
 
     private String pseudo;
     @JsonBackReference
-    private GameManager gm;
+    private GameManager gameManager;
+
     @JsonCreator
-    public Joueur(@JsonProperty("couleur") final Color couleur, @JsonProperty("pseudo") final String pseudo, @JsonProperty("gm") final GameManager gm) {
+    public Joueur(@JsonProperty("couleur") final Color couleur, @JsonProperty("pseudo") final String pseudo, @JsonProperty("gameManager") final GameManager gm) {
         this.couleur = couleur;
         this.pseudo = pseudo;
-        this.gm = gm;
+        this.gameManager = gm;
     }
 
+    @JsonCreator
+    public Joueur(@JsonProperty("couleur") final Color couleur, @JsonProperty("pseudo") final String pseudo) {
+        this(couleur, pseudo, null);
+    }
 
+    public void setGameManager(@NotNull final GameManager gm) {
+        this.gameManager = gm;
+    }
 
     public static boolean checkPlayerConsistency(final Joueur j1, final Joueur j2) {
         return (!j1.couleur.equals(j2.couleur)) && (!j1.pseudo.equals(j2.pseudo));
@@ -47,6 +56,7 @@ public abstract class Joueur {
         return pseudo;
     }
 
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -62,6 +72,6 @@ public abstract class Joueur {
 
     @Override
     public int hashCode() {
-        return Objects.hash(couleur, pseudo, gm);
+        return Objects.hash(couleur, pseudo, gameManager);
     }
 }

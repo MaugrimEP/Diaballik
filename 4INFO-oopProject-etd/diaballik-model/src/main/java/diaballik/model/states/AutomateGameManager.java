@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import diaballik.model.game.GameManager;
 import diaballik.model.joueur.Joueur;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 // We want to add a JSON attribute to know the type of the object.
@@ -31,20 +32,29 @@ public class AutomateGameManager {
         this.etatCourant = etatInitial;
     }
 
-    public void setEtatCourant(final EtatTour newEtatCourrant) {
-
+    public AutomateGameManager(final EtatTour etatInitial) {
+        this(null, etatInitial);
     }
+
+    public void setEtatCourant(final EtatTour newEtatCourrant) {
+        this.etatCourant = newEtatCourrant;
+    }
+
 
     public int eventJouer() {
         return 0;
     }
 
     public Joueur getJoueurCourant() {
-        return null;
+        return etatCourant.getJoueurCourant(this);
     }
 
     public GameManager getGameManager() {
-        return null;
+        return gameManager;
+    }
+
+    public void setGameManager(@NotNull final GameManager gameManager) {
+        this.gameManager = gameManager;
     }
 
     @Override
