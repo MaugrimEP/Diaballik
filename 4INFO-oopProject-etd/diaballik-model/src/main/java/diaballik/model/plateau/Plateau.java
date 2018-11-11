@@ -7,13 +7,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import diaballik.model.commande.Action;
-import diaballik.model.coordonnee.Coordonnee;
+import diaballik.model.Coordonnee;
 import diaballik.model.deserializer.MapCoordonneeDeserializer;
-import diaballik.model.game.GameManager;
-import diaballik.model.joueur.JoueurHumain;
 
-import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -29,6 +25,8 @@ import java.util.Objects;
 // We add a unique identifier to the Json object
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Plateau {
+    public static int SIZE = 7;
+
     @JsonDeserialize(keyUsing = MapCoordonneeDeserializer.class)
     protected Map<Coordonnee, Case> lescases;
 

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import diaballik.model.coordonnee.Coordonnee;
+import diaballik.model.Coordonnee;
 import diaballik.model.plateau.Plateau;
 
 import java.util.Objects;

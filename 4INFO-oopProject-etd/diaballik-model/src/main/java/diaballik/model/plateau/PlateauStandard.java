@@ -2,7 +2,7 @@ package diaballik.model.plateau;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import diaballik.model.coordonnee.Coordonnee;
+import diaballik.model.Coordonnee;
 
 import java.util.Map;
 

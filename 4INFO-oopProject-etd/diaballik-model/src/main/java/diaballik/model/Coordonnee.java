@@ -1,4 +1,4 @@
-package diaballik.model.coordonnee;
+package diaballik.model;
 
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -15,9 +15,9 @@ import java.util.Objects;
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Coordonnee {
 
-    private int ligne;
+    public final int ligne;
 
-    private int colonne;
+    public final int colonne;
 
     @JsonCreator
     public Coordonnee(@JsonProperty("ligne") final int ligne, @JsonProperty("colonne") final int colonne) {
