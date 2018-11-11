@@ -3,7 +3,6 @@ package diaballik.model;
 import diaballik.model.exceptions.InvalidCoordinateException;
 import diaballik.model.plateau.Plateau;
 
-import javax.annotation.Nonnegative;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
