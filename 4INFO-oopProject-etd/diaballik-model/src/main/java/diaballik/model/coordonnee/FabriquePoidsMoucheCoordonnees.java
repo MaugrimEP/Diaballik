@@ -1,4 +1,4 @@
-package diaballik.model;
+package diaballik.model.coordonnee;
 
 import diaballik.model.exceptions.InvalidCoordinateException;
 import diaballik.model.plateau.Plateau;

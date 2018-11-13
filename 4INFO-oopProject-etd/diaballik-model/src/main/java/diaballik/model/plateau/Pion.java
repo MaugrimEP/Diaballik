@@ -37,4 +37,8 @@ public class Pion {
     public int hashCode() {
         return Objects.hash(joueur);
     }
+
+    public Joueur getJoueur() {
+        return joueur;
+    }
 }

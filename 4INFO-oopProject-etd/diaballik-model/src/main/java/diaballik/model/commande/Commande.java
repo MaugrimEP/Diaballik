@@ -26,10 +26,6 @@ public class Commande {
 
 	}
 
-	public void undo() {
-
-	}
-
     @Override
     public boolean equals(final Object o) {
         if (this == o) {

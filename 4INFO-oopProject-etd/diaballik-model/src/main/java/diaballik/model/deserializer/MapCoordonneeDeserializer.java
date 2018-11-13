@@ -2,7 +2,7 @@ package diaballik.model.deserializer;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.KeyDeserializer;
-import diaballik.model.FabriquePoidsMoucheCoordonnees;
+import diaballik.model.coordonnee.FabriquePoidsMoucheCoordonnees;
 
 import java.io.IOException;
 

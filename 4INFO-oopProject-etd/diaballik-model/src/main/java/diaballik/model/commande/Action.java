@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import diaballik.model.Coordonnee;
+import diaballik.model.coordonnee.Coordonnee;
 import diaballik.model.plateau.Plateau;
 
 import java.util.Objects;
@@ -29,6 +29,14 @@ public class Action {
 		this.plateau = plateau;
 	}
 
+	public Coordonnee getArrivee() {
+		return arrivee;
+	}
+
+	public Coordonnee getDepart() {
+		return depart;
+	}
+
 	@Override
 	public boolean equals(final Object o) {
 		if (this == o) {
@@ -46,5 +54,9 @@ public class Action {
 	@Override
 	public int hashCode() {
 		return Objects.hash(arrivee, depart, plateau);
+	}
+
+	public void setPlateau(Plateau plateau) {
+		this.plateau=plateau;
 	}
 }

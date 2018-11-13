@@ -8,6 +8,7 @@ import diaballik.model.memento.MementoGameManager;
 import diaballik.model.plateau.Plateau;
 import diaballik.model.states.AutomateGameManager;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +26,7 @@ public class GameManager {
 
     private Plateau plateau;
 
-    private Collection<Commande> commandes;
+    private List<Commande> commandes;
 
     @JsonManagedReference
     private Joueur joueur1;
@@ -33,10 +34,10 @@ public class GameManager {
     @JsonManagedReference
     private Joueur joueur2;
     public GameManager() {
-
+        commandes=new ArrayList<>();
     }
     @JsonCreator
-    public GameManager(@JsonProperty("automate") final AutomateGameManager automate, @JsonProperty("plateau") final Plateau plateau, @JsonProperty("commandes") final Collection<Commande> commandes, @JsonProperty("joueur1") final Joueur joueur1, @JsonProperty("joueur2") final Joueur joueur2) {
+    public GameManager(@JsonProperty("automate") final AutomateGameManager automate, @JsonProperty("plateau") final Plateau plateau, @JsonProperty("commandes") final List<Commande> commandes, @JsonProperty("joueur1") final Joueur joueur1, @JsonProperty("joueur2") final Joueur joueur2) {
         this.automate = automate;
         this.plateau = plateau;
         this.commandes = commandes;
@@ -44,24 +45,35 @@ public class GameManager {
         this.joueur2 = joueur2;
     }
 
-    public List<Action> eventJouer() {
-        return null;
+    /**
+     *
+     * @return la liste des commandes jouées dans ce coup
+     */
+    public List<Commande> eventJouer() {
+        int nbCoupsJoue = automate.eventJouer();
+        return getLastActions(nbCoupsJoue);
     }
 
-    public boolean coupBon(final Joueur joueur, final Action action) {
-        return false;
+    public boolean coupBon(final Joueur joueur, final Action action) {//. TODO coupBon
+        return plateau.coupBon(joueur,action);
     }
 
     public void ajouterAction(final Action action) {
-
+        action.setPlateau(plateau);
+        commandes.add(new Commande(action));
     }
 
     public void performLastAction() {
-
+        commandes.get(commandes.size()-1).doAction();
     }
 
-    public List<Action> getLastActions(final int nb) {
-        return null;
+    /**
+     * Précondition : il y a au moins nb éléments dans la liste
+     * @param nb
+     * @return la liste des nb dernières actions
+     */
+    public List<Commande> getLastActions(final int nb) {
+        return commandes.subList(commandes.size()-1-nb,commandes.size()-1);
     }
 
     public boolean gameFinished() {

@@ -61,4 +61,12 @@ public class Case {
 	public int hashCode() {
 		return Objects.hash(pion, balle);
 	}
+
+    public boolean isEmpty() {
+		return pion==null;
+    }
+
+	public boolean hasBall() {
+		return balle!=null;
+	}
 }

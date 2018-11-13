@@ -7,15 +7,17 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import diaballik.model.Coordonnee;
-import diaballik.model.FabriquePoidsMoucheCoordonnees;
+import diaballik.model.coordonnee.Coordonnee;
+import diaballik.model.coordonnee.FabriquePoidsMoucheCoordonnees;
+import diaballik.model.commande.Action;
 import diaballik.model.deserializer.MapCoordonneeDeserializer;
 import diaballik.model.joueur.Joueur;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -115,4 +117,64 @@ public abstract class Plateau {
     public int hashCode() {
         return Objects.hash(lesCases);
     }
+
+    public boolean coupBon(final Joueur joueur, final Action action) {
+        final Coordonnee depart = action.getDepart();
+        final Coordonnee arrivee = action.getArrivee();
+
+        final Case caseDepart = lesCases.get(depart);
+        final Case caseArrivee = lesCases.get(arrivee);
+
+        final boolean caseVide = caseDepart.isEmpty();
+        final boolean departNotMine = !caseDepart.getPion().getJoueur().equals(joueur);
+
+        if (caseVide || departNotMine) {
+            return false;
+        }
+
+        if (caseDepart.hasBall()) {
+            return coupBonBall(joueur, action);
+        } else {
+            return coupBonPion(joueur, action);
+        }
+    }
+
+    private boolean coupBonBall(final Joueur joueur, final Action action) {
+        final Coordonnee depart = action.getDepart();
+        final Coordonnee arrivee = action.getArrivee();
+
+        final Case caseDepart = lesCases.get(depart);
+        final Case caseArrivee = lesCases.get(arrivee);
+
+        final boolean sameArriveDepart = depart.equals(arrivee);
+        final boolean arriveNotMine = !caseArrivee.getPion().getJoueur().equals(joueur);
+
+        final boolean notSameLigne = !depart.sameLigne(arrivee);
+        final boolean notSameColonne = !depart.sameColonne(arrivee);
+        final boolean notSameDiagonal = !depart.sameDiagonal(arrivee);
+
+        if(sameArriveDepart || arriveNotMine || notSameLigne || notSameColonne || notSameDiagonal) {
+            return false;
+        }
+
+        final Collection<Coordonnee> path = depart.pathTo(arrivee);
+        final boolean notAllEmpty = !path.stream().allMatch((coordonnee -> lesCases.get(coordonnee).isEmpty()));
+
+        return !notAllEmpty;
+    }
+
+    private boolean coupBonPion(final Joueur joueur, final Action action) {
+        final Coordonnee depart = action.getDepart();
+        final Coordonnee arrivee = action.getArrivee();
+
+        final Case caseDepart = lesCases.get(depart);
+        final Case caseArrivee = lesCases.get(arrivee);
+
+        final boolean notArriveVide = !caseArrivee.isEmpty();
+        final boolean coupNonAdjacent = depart.distanceTo(arrivee) != 1;
+
+
+        return !notArriveVide && !coupNonAdjacent;
+    }
+
 }

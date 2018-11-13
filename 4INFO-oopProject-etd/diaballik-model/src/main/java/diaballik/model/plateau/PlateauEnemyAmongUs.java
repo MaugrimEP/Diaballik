@@ -2,14 +2,13 @@ package diaballik.model.plateau;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import diaballik.model.Coordonnee;
-import diaballik.model.FabriquePoidsMoucheCoordonnees;
+import diaballik.model.coordonnee.Coordonnee;
+import diaballik.model.coordonnee.FabriquePoidsMoucheCoordonnees;
 import diaballik.model.joueur.Joueur;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.stream.Stream;
 
 public class PlateauEnemyAmongUs extends Plateau {
     @JsonCreator
