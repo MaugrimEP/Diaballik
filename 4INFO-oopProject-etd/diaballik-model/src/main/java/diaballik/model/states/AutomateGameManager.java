@@ -42,7 +42,7 @@ public class AutomateGameManager {
 
 
     public int eventJouer() {
-        return 0;
+        return etatCourant.jouer(this);
     }
 
     public Joueur getJoueurCourant() {

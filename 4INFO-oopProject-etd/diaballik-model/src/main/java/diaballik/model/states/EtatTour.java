@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import diaballik.model.game.GameManager;
 import diaballik.model.joueur.Joueur;
 
 import java.util.Objects;
@@ -27,17 +28,24 @@ import java.util.Objects;
 public abstract class EtatTour {
     private static int NB_COUP_INIT = 3;
 
-    private int nbCoup;
+    private int nbCoupRestant;
     protected EtatTour() {
         this(NB_COUP_INIT);
     }
     @JsonCreator
-    protected EtatTour(@JsonProperty("nbCoup") final int nbCoup) {
-        this.nbCoup = nbCoup;
+    protected EtatTour(@JsonProperty("nbCoupRestant") final int nbCoup) {
+        this.nbCoupRestant = nbCoup;
     }
 
     public int jouer(final AutomateGameManager automate) {
-        return 0;
+        int nbCoupTotal= 1;
+        Joueur j = getJoueurCourant(automate);
+        j.jouer();
+        nbCoupRestant--;
+        if(tourFini()) {
+            automate.setEtatCourant(getEtatSuivant());
+        }
+        return nbCoupTotal;
     }
 
     public abstract Joueur getJoueurCourant(AutomateGameManager automate);
@@ -46,7 +54,7 @@ public abstract class EtatTour {
     public abstract EtatTour getEtatSuivant();
 
     public boolean tourFini() {
-        return false;
+        return nbCoupRestant == 0;
     }
 
 
@@ -59,11 +67,11 @@ public abstract class EtatTour {
             return false;
         }
         final EtatTour etatTour = (EtatTour) o;
-        return nbCoup == etatTour.nbCoup;
+        return nbCoupRestant == etatTour.nbCoupRestant;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nbCoup);
+        return Objects.hash(nbCoupRestant);
     }
 }

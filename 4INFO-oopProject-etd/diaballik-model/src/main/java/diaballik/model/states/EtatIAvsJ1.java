@@ -15,15 +15,22 @@ public class EtatIAvsJ1 extends EtatTour {
 
     public EtatIAvsJ1() {
     }
-
+    @Override
+    public int jouer(AutomateGameManager automate) {
+        int nbCoupTotal = super.jouer(automate);
+        if(!tourFini()) {
+            nbCoupTotal+= automate.eventJouer();
+        }
+        return nbCoupTotal;
+    }
     @Override
     public Joueur getJoueurCourant(final AutomateGameManager automate) {
-        return null;
+        return automate.getGameManager().getJoueur2();
     }
 
     @Override
     public EtatTour getEtatSuivant() {
-        return null;
+        return new EtatJ1vsIA();
     }
 
 }

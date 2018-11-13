@@ -8,7 +8,16 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ModelTest {
+class TestCoordonnee {
+
+    @Test
+    void getLigneCoordonneePlateau() {
+        List<Coordonnee> ligneCoordonnee = Plateau.getLigneCoordonnee(0, Plateau.SIZE);
+        assertEquals(7, ligneCoordonnee.size());
+        for (int i = 0; i < Plateau.SIZE; i++) {
+            assertTrue(ligneCoordonnee.contains(FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(0,i)));
+        }
+    }
 
     @Test
     void fabriquePoidsMoucheGetCoordonneesOk() {
@@ -19,16 +28,7 @@ class ModelTest {
 
     @Test
     void fabriquePoidsMoucheGetCoordonneesExceptionInvalidCoordinates() {
-        assertThrows(InvalidCoordinateException.class, () -> FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(8, 2));
         assertThrows(InvalidCoordinateException.class, () -> FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(2, 9));
-    }
-
-    @Test
-    void getLigneCoordonneePlateau() {
-        List<Coordonnee> ligneCoordonnee = Plateau.getLigneCoordonnee(0, Plateau.SIZE);
-        assertEquals(7, ligneCoordonnee.size());
-        for (int i = 0; i < Plateau.SIZE; i++) {
-          assertTrue(ligneCoordonnee.contains(FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(0,i)));
-        }
+        assertThrows(InvalidCoordinateException.class, () -> FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(8, 2));
     }
 }

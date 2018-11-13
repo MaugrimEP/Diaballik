@@ -71,7 +71,7 @@ public abstract class Plateau {
     }
 
     /**
-     * initialise le plateau selon la stratégie
+     * initialise le plateau selon la stratégie standard
      *
      * @param j1
      * @param j2

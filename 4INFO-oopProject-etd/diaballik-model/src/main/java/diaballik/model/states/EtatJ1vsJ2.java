@@ -14,11 +14,11 @@ public class EtatJ1vsJ2 extends EtatTour {
     }
     @Override
     public Joueur getJoueurCourant(final AutomateGameManager automate) {
-        return null;
+        return automate.getGameManager().getJoueur1();
     }
 
     @Override
     public EtatTour getEtatSuivant() {
-        return null;
+        return new EtatJ2vsJ1();
     }
 }
