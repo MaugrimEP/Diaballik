@@ -1,6 +1,12 @@
 package diaballik.model.game;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import diaballik.model.commande.Action;
 import diaballik.model.commande.Commande;
 import diaballik.model.joueur.Joueur;
@@ -9,7 +15,6 @@ import diaballik.model.plateau.Plateau;
 import diaballik.model.states.AutomateGameManager;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,9 +38,11 @@ public class GameManager {
 
     @JsonManagedReference
     private Joueur joueur2;
+
     public GameManager() {
-        commandes=new ArrayList<>();
+        commandes = new ArrayList<>();
     }
+
     @JsonCreator
     public GameManager(@JsonProperty("automate") final AutomateGameManager automate, @JsonProperty("plateau") final Plateau plateau, @JsonProperty("commandes") final List<Commande> commandes, @JsonProperty("joueur1") final Joueur joueur1, @JsonProperty("joueur2") final Joueur joueur2) {
         this.automate = automate;
@@ -46,16 +53,15 @@ public class GameManager {
     }
 
     /**
-     *
      * @return la liste des commandes jouées dans ce coup
      */
     public List<Commande> eventJouer() {
-        int nbCoupsJoue = automate.eventJouer();
+        final int nbCoupsJoue = automate.eventJouer();
         return getLastActions(nbCoupsJoue);
     }
 
-    public boolean coupBon(final Joueur joueur, final Action action) {//. TODO coupBon
-        return plateau.coupBon(joueur,action);
+    public boolean coupBon(final Joueur joueur, final Action action) {
+        return plateau.coupBon(joueur, action);
     }
 
     public void ajouterAction(final Action action) {
@@ -64,24 +70,25 @@ public class GameManager {
     }
 
     public void performLastAction() {
-        commandes.get(commandes.size()-1).doAction();
+        commandes.get(commandes.size() - 1).doAction();
     }
 
     /**
      * Précondition : il y a au moins nb éléments dans la liste
+     *
      * @param nb
      * @return la liste des nb dernières actions
      */
     public List<Commande> getLastActions(final int nb) {
-        return commandes.subList(commandes.size()-1-nb,commandes.size()-1);
+        return commandes.subList(commandes.size() - 1 - nb, commandes.size() - 1);
     }
 
     public boolean gameFinished() {
-        return false;
+        return plateau.isGameFinished(joueur1, joueur2);
     }
 
     public Joueur getJoueurGagnant() {
-        return null;
+        return plateau.getWinner(joueur1, joueur2);
     }
 
     public MementoGameManager createMemento() {

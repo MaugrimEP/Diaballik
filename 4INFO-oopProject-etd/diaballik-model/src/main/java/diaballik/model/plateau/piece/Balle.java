@@ -38,4 +38,8 @@ public class Balle {
     public int hashCode() {
         return Objects.hash(joueur);
     }
+
+    public Joueur getJoueur() {
+        return joueur;
+    }
 }

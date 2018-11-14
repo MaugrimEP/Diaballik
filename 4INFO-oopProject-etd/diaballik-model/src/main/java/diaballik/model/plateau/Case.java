@@ -79,4 +79,7 @@ public class Case {
         return Objects.hash(pion, balle);
     }
 
+    public Balle getBalle() {
+        return balle;
+    }
 }

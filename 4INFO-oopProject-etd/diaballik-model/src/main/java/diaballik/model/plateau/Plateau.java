@@ -7,19 +7,19 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import diaballik.model.commande.Action;
 import diaballik.model.coordonnee.Coordonnee;
 import diaballik.model.coordonnee.FabriquePoidsMoucheCoordonnees;
-import diaballik.model.commande.Action;
 import diaballik.model.deserializer.MapCoordonneeDeserializer;
 import diaballik.model.joueur.Joueur;
 import diaballik.model.plateau.piece.Balle;
 import diaballik.model.plateau.piece.Pion;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -103,6 +103,7 @@ public abstract class Plateau {
     /**
      * précondition : coup bon = true
      * déplace le pion ou la balle
+     *
      * @param c1
      * @param c2
      */
@@ -110,9 +111,9 @@ public abstract class Plateau {
         final Case caseDepart = lesCases.get(c1);
         final Case caseArrivee = lesCases.get(c2);
 
-        if(caseDepart.hasBall()) {
+        if (caseDepart.hasBall()) {
             caseArrivee.setBalle(caseDepart.takeBall());
-        }else {
+        } else {
             caseArrivee.setPion(caseDepart.takePion());
         }
     }
@@ -166,7 +167,7 @@ public abstract class Plateau {
         final boolean notSameColonne = !depart.sameColonne(arrivee);
         final boolean notSameDiagonal = !depart.sameDiagonal(arrivee);
 
-        if(sameArriveDepart || arriveNotMine || notSameLigne || notSameColonne || notSameDiagonal) {
+        if (sameArriveDepart || arriveNotMine || notSameLigne || notSameColonne || notSameDiagonal) {
             return false;
         }
 
@@ -189,4 +190,27 @@ public abstract class Plateau {
         return !notArriveVide && !coupNonAdjacent;
     }
 
+    public boolean isGameFinished(final Joueur j1, final Joueur j2) {
+        return hasJ1Won(j1) || hasJ2Won(j2);
+    }
+
+    private boolean hasJ1Won(final Joueur j1) {
+        final List<Coordonnee> ligneBas = getLigneCoordonnee(Plateau.SIZE - 1, Plateau.SIZE);
+        return ligneBas.stream().anyMatch((c) -> lesCases.get(c).hasBall() && lesCases.get(c).getBalle().getJoueur().equals(j1));
+    }
+
+    private boolean hasJ2Won(final Joueur j2) {
+        final List<Coordonnee> ligneHaut = getLigneCoordonnee(0, Plateau.SIZE); //j1 est en haut
+        return ligneHaut.stream().anyMatch((c) -> lesCases.get(c).hasBall() && lesCases.get(c).getBalle().getJoueur().equals(j2));
+    }
+
+    /**
+     * précondition : hasJ1Won(j1) || hasJ2Won(j2)
+     * @param joueur1
+     * @param joueur2
+     * @return le joueur gagnant
+     */
+    public Joueur getWinner(final Joueur joueur1, final Joueur joueur2) {
+        return hasJ1Won(joueur1) ? joueur1 : joueur2;
+    }
 }
