@@ -1,4 +1,4 @@
-package diaballik.model.plateau;
+package diaballik.model.plateau.piece;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -13,11 +13,12 @@ import java.util.Objects;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 // We add a unique identifier to the Json object
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-public class Pion {
+public class Balle {
+
     private Joueur joueur;
 
     @JsonCreator
-    public Pion(@JsonProperty("joueur") final Joueur joueur) {
+    public Balle(@JsonProperty("joueur") final Joueur joueur) {
         this.joueur = joueur;
     }
 
@@ -29,16 +30,12 @@ public class Pion {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final Pion pion = (Pion) o;
-        return Objects.equals(joueur, pion.joueur);
+        final Balle balle = (Balle) o;
+        return Objects.equals(joueur, balle.joueur);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(joueur);
-    }
-
-    public Joueur getJoueur() {
-        return joueur;
     }
 }

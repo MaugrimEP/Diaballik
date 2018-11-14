@@ -12,6 +12,8 @@ import diaballik.model.coordonnee.FabriquePoidsMoucheCoordonnees;
 import diaballik.model.commande.Action;
 import diaballik.model.deserializer.MapCoordonneeDeserializer;
 import diaballik.model.joueur.Joueur;
+import diaballik.model.plateau.piece.Balle;
+import diaballik.model.plateau.piece.Pion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +100,21 @@ public abstract class Plateau {
         lesCases.put(c2, balleJ1);
     }
 
+    /**
+     * précondition : coup bon = true
+     * déplace le pion ou la balle
+     * @param c1
+     * @param c2
+     */
     public void move(final Coordonnee c1, final Coordonnee c2) {
+        final Case caseDepart = lesCases.get(c1);
+        final Case caseArrivee = lesCases.get(c2);
+
+        if(caseDepart.hasBall()) {
+            caseArrivee.setBalle(caseDepart.takeBall());
+        }else {
+            caseArrivee.setPion(caseDepart.takePion());
+        }
     }
 
     @Override
@@ -120,10 +136,8 @@ public abstract class Plateau {
 
     public boolean coupBon(final Joueur joueur, final Action action) {
         final Coordonnee depart = action.getDepart();
-        final Coordonnee arrivee = action.getArrivee();
 
         final Case caseDepart = lesCases.get(depart);
-        final Case caseArrivee = lesCases.get(arrivee);
 
         final boolean caseVide = caseDepart.isEmpty();
         final boolean departNotMine = !caseDepart.getPion().getJoueur().equals(joueur);
@@ -135,7 +149,7 @@ public abstract class Plateau {
         if (caseDepart.hasBall()) {
             return coupBonBall(joueur, action);
         } else {
-            return coupBonPion(joueur, action);
+            return coupBonPion(action);
         }
     }
 
@@ -143,7 +157,6 @@ public abstract class Plateau {
         final Coordonnee depart = action.getDepart();
         final Coordonnee arrivee = action.getArrivee();
 
-        final Case caseDepart = lesCases.get(depart);
         final Case caseArrivee = lesCases.get(arrivee);
 
         final boolean sameArriveDepart = depart.equals(arrivee);
@@ -163,11 +176,10 @@ public abstract class Plateau {
         return !notAllEmpty;
     }
 
-    private boolean coupBonPion(final Joueur joueur, final Action action) {
+    private boolean coupBonPion(final Action action) {
         final Coordonnee depart = action.getDepart();
         final Coordonnee arrivee = action.getArrivee();
 
-        final Case caseDepart = lesCases.get(depart);
         final Case caseArrivee = lesCases.get(arrivee);
 
         final boolean notArriveVide = !caseArrivee.isEmpty();

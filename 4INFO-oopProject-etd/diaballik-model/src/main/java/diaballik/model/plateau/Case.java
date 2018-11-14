@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import diaballik.model.joueur.Joueur;
+import diaballik.model.plateau.piece.Balle;
+import diaballik.model.plateau.piece.Pion;
 
 import java.util.Objects;
 
@@ -14,59 +15,68 @@ import java.util.Objects;
 // We add a unique identifier to the Json object
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Case {
-	private Pion pion;
+    private Pion pion;
 
-	private Balle balle;
+    private Balle balle;
 
-	public Case() {
+    public Case() {
 
-	}
-
-	@JsonCreator
-	private Case(@JsonProperty("pion") final Pion pion, @JsonProperty("balle") final Balle balle) {
-		this.pion = pion;
-		this.balle = balle;
-	}
-
-	public Pion getPion() {
-		return pion;
-	}
-
-	public void setPion(final Pion pion) {
-		this.pion = pion;
-	}
-
-	public Balle getBalle() {
-		return balle;
-	}
-
-	public void setBalle(final Balle balle) {
-		this.balle = balle;
-	}
-
-	@Override
-	public boolean equals(final Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		final Case aCase = (Case) o;
-		return Objects.equals(pion, aCase.pion) &&
-				Objects.equals(balle, aCase.balle);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(pion, balle);
-	}
-
-    public boolean isEmpty() {
-		return pion==null;
     }
 
-	public boolean hasBall() {
-		return balle!=null;
-	}
+    @JsonCreator
+    private Case(@JsonProperty("pion") final Pion pion, @JsonProperty("balle") final Balle balle) {
+        this.pion = pion;
+        this.balle = balle;
+    }
+
+    public Pion getPion() {
+        return pion;
+    }
+
+    public void setPion(final Pion pion) {
+        this.pion = pion;
+    }
+
+    public void setBalle(final Balle balle) {
+        this.balle = balle;
+    }
+
+    public boolean isEmpty() {
+        return pion == null;
+    }
+
+    public boolean hasBall() {
+        return balle != null;
+    }
+
+    public Balle takeBall() {
+        final Balle b = balle;
+        balle = null;
+        return b;
+    }
+
+    public Pion takePion() {
+        final Pion p = pion;
+        pion = null;
+        return p;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Case aCase = (Case) o;
+        return Objects.equals(pion, aCase.pion) &&
+                Objects.equals(balle, aCase.balle);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pion, balle);
+    }
+
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import diaballik.model.coordonnee.Coordonnee;
 import diaballik.model.coordonnee.FabriquePoidsMoucheCoordonnees;
 import diaballik.model.joueur.Joueur;
+import diaballik.model.plateau.piece.Balle;
 
 import java.util.Map;
 
