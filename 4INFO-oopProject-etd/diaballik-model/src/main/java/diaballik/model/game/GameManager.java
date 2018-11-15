@@ -52,6 +52,10 @@ public class GameManager {
         this.joueur2 = joueur2;
     }
 
+    public Plateau getPlateau() {
+        return plateau;
+    }
+
     /**
      * @return la liste des commandes jouées dans ce coup
      */

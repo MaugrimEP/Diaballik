@@ -35,7 +35,7 @@ public class Pion {
 
     @Override
     public int hashCode() {
-        return Objects.hash(joueur);
+        return Objects.hash(joueur.getPseudo());
     }
 
     public Joueur getJoueur() {

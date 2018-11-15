@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import diaballik.model.exceptions.InvalidCoordinateException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -59,6 +61,31 @@ public class Coordonnee {
 
     public boolean sameColonne(final Coordonnee other) {
         return this.colonne == other.colonne;
+    }
+
+    /**
+     * @param sizePlateau
+     * @return toutes les coordonnées composant les diagonales inférieur et supérieur passant par this
+     */
+    public Collection<Coordonnee> getDiagonal(final int sizePlateau) {
+        final Collection<Coordonnee> coordonneesDiagonales = new HashSet<>();
+
+
+        final IntUnaryOperator diagonalInferieur = (x) -> -1 * x + this.ligne - (-1) * this.colonne;
+        final IntUnaryOperator diagonalSuperieur = (x) -> 1 * x + this.ligne - 1 * this.colonne;
+
+        Stream.iterate(0, x -> x + 1).limit(sizePlateau - 1).forEach(colonne -> {
+            try {
+                coordonneesDiagonales.add(FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(diagonalInferieur.applyAsInt(colonne), colonne));
+            } catch (InvalidCoordinateException e) {
+            }
+            try {
+                coordonneesDiagonales.add(FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(diagonalSuperieur.applyAsInt(colonne), colonne));
+            } catch (InvalidCoordinateException e) {
+            }
+        });
+
+        return coordonneesDiagonales;
     }
 
     /**

@@ -1,7 +1,6 @@
 package diaballik.model.joueur;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import diaballik.model.commande.Action;
 import diaballik.model.game.GameManager;
@@ -10,16 +9,16 @@ import java.awt.Color;
 
 
 public class IA extends Joueur {
-    @JsonIgnore
     private StrategieIA strategieIA;
 
     @JsonCreator
-    public IA(@JsonProperty("couleur") final Color couleur, @JsonProperty("pseudo") final String pseudo, @JsonProperty("gm") final GameManager gm) {
+    public IA(@JsonProperty("couleur") final Color couleur, @JsonProperty("pseudo") final String pseudo, @JsonProperty("gm") final GameManager gm, @JsonProperty("strategieIA") final StrategieIA strategieIA) {
         super(couleur, pseudo, gm);
+        this.strategieIA = strategieIA;
     }
 
     public Action reflechir() {
-        return strategieIA.reflechir();
+        return strategieIA.reflechir(this);
     }
 
 }

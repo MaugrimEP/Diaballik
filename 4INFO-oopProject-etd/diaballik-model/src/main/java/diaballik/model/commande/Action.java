@@ -17,46 +17,54 @@ import java.util.Objects;
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Action {
 
-	private Coordonnee arrivee;
+    private Coordonnee arrivee;
 
-	private Coordonnee depart;
+    private Coordonnee depart;
 
-	private Plateau plateau;
+    private Plateau plateau;
 
-	public Action(@JsonProperty("arrivee") final Coordonnee arrivee, @JsonProperty("depart") final Coordonnee depart, @JsonProperty("plateau") final Plateau plateau) {
-		this.arrivee = arrivee;
-		this.depart = depart;
-		this.plateau = plateau;
-	}
+    public Action(@JsonProperty("arrivee") final Coordonnee arrivee, @JsonProperty("depart") final Coordonnee depart, @JsonProperty("plateau") final Plateau plateau) {
+        this.arrivee = arrivee;
+        this.depart = depart;
+        this.plateau = plateau;
+    }
 
-	public Coordonnee getArrivee() {
-		return arrivee;
-	}
+    public Coordonnee getArrivee() {
+        return arrivee;
+    }
 
-	public Coordonnee getDepart() {
-		return depart;
-	}
+    public Coordonnee getDepart() {
+        return depart;
+    }
 
-	@Override
-	public boolean equals(final Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		final Action action = (Action) o;
-		return Objects.equals(arrivee, action.arrivee) &&
-				Objects.equals(depart, action.depart) &&
-				Objects.equals(plateau, action.plateau);
-	}
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final Action action = (Action) o;
+        return Objects.equals(arrivee, action.arrivee) &&
+                Objects.equals(depart, action.depart) &&
+                Objects.equals(plateau, action.plateau);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(arrivee, depart, plateau);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(arrivee, depart, plateau);
+    }
 
-	public void setPlateau(Plateau plateau) {
-		this.plateau=plateau;
-	}
+    public void setPlateau(final Plateau plateau) {
+        this.plateau = plateau;
+    }
+
+    @Override
+    public String toString() {
+        return "Action{" +
+                "arrivee=" + arrivee +
+                ", depart=" + depart +
+                '}';
+    }
 }

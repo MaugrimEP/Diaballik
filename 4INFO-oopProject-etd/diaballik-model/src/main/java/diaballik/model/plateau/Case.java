@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import diaballik.model.joueur.Joueur;
 import diaballik.model.plateau.piece.Balle;
 import diaballik.model.plateau.piece.Pion;
 
@@ -49,6 +50,14 @@ public class Case {
         return balle != null;
     }
 
+    /**
+     * @param j
+     * @return
+     */
+    public boolean isTo(final Joueur j) {
+        return !isEmpty() && pion.getJoueur().equals(j);
+    }
+
     public Balle takeBall() {
         final Balle b = balle;
         balle = null;
@@ -77,6 +86,16 @@ public class Case {
     @Override
     public int hashCode() {
         return Objects.hash(pion, balle);
+    }
+
+    @Override
+    public String toString() {
+        if (hasBall()) {
+            return "| B ";
+        } else if (!isEmpty()) {
+            return "| P ";
+        }
+        return "|   ";
     }
 
     public Balle getBalle() {

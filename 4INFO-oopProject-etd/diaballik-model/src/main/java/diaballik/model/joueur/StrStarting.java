@@ -1,11 +1,17 @@
 package diaballik.model.joueur;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import diaballik.model.commande.Action;
 
-public class StrStarting implements StrategieIA {
+public class StrStarting extends StrategieIA {
 
-	public Action reflechir() {
-		return null;
-	}
+    @JsonCreator
+    public StrStarting() {
+    }
+
+    @Override
+    public Action reflechir(final Joueur joueur) {
+        return null;
+    }
 
 }

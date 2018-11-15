@@ -37,6 +37,10 @@ public abstract class Joueur {
         this.gameManager = gm;
     }
 
+    public GameManager getGameManager() {
+        return gameManager;
+    }
+
     @JsonCreator
     public Joueur(@JsonProperty("couleur") final Color couleur, @JsonProperty("pseudo") final String pseudo) {
         this(couleur, pseudo, null);
@@ -78,6 +82,6 @@ public abstract class Joueur {
 
     @Override
     public int hashCode() {
-        return Objects.hash(couleur, pseudo, gameManager);
+        return Objects.hash(couleur, pseudo);
     }
 }
