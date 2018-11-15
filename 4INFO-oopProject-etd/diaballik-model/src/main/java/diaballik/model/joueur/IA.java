@@ -19,7 +19,7 @@ public class IA extends Joueur {
     }
 
     public Action reflechir() {
-        return null;
+        return strategieIA.reflechir();
     }
 
 }

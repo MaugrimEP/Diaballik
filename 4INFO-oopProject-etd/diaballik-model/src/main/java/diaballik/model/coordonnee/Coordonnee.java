@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-
+import java.util.function.Function;
 import java.util.function.IntUnaryOperator;
 import java.util.stream.Stream;
 
@@ -63,23 +63,40 @@ public class Coordonnee {
 
     /**
      * précondition : même ligne meme colonne ou meme diagonale
+     *
      * @param other
      * @return les elements entre les deux coordonnées (this et other)
      */
     public Collection<Coordonnee> pathTo(final Coordonnee other) {
         final List<Coordonnee> path = new ArrayList<>();
 
-        final int coeff = (this.ligne - other.ligne) / (this.colonne - other.colonne);
-        final int ordoAOrigin = this.ligne - coeff * this.colonne;
 
-        final IntUnaryOperator pathFinder = (x) -> coeff * x + ordoAOrigin;
+        final Function<Integer, Coordonnee> coordonnerRelation;
+        final int minIterate;
+        final int maxIterate;
 
-        final int minAbs = Math.min(this.colonne, other.colonne);
-        final int maxAbs = Math.max(this.colonne, other.colonne);
 
-        Stream.iterate(minAbs + 1, (x) -> x + 1)
-                .limit(maxAbs - minAbs - 1)
-                .forEach((x) -> path.add(FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(x, pathFinder.applyAsInt(x))));
+        if (this.colonne == other.colonne) {
+            minIterate = Math.min(this.ligne, other.ligne);
+            maxIterate = Math.max(this.ligne, other.ligne);
+
+            coordonnerRelation = (y) -> FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(y, this.colonne);
+
+        } else {
+            final int coeff = (this.ligne - other.ligne) / (this.colonne - other.colonne);
+            final int ordoAOrigin = this.ligne - coeff * this.colonne;
+
+            final IntUnaryOperator pathFinder = (x) -> coeff * x + ordoAOrigin;
+
+            minIterate = Math.min(this.colonne, other.colonne);
+            maxIterate = Math.max(this.colonne, other.colonne);
+
+            coordonnerRelation = (x) -> FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(pathFinder.applyAsInt(x), x);
+        }
+
+        Stream.iterate(minIterate + 1, (x) -> x + 1)
+                .limit(maxIterate - minIterate - 1)
+                .forEach((x) -> path.add(coordonnerRelation.apply(x)));
 
         return path;
     }

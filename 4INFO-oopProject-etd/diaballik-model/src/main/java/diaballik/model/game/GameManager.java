@@ -100,7 +100,7 @@ public class GameManager {
     }
 
     public Joueur getJoueurCourant() {
-        return null;
+        return automate.getJoueurCourant();
     }
 
     public AutomateGameManager getAutomate() {
