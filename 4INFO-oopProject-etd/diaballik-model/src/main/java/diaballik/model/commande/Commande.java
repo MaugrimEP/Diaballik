@@ -15,16 +15,16 @@ import java.util.Objects;
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Commande {
 
-	private Action action;
+    public final Action action;
 
-	@JsonCreator
+    @JsonCreator
     public Commande(@JsonProperty("action") final Action action) {
         this.action = action;
     }
 
-    public void doAction() {
+    public void doAction() { //TODO
 
-	}
+    }
 
     @Override
     public boolean equals(final Object o) {

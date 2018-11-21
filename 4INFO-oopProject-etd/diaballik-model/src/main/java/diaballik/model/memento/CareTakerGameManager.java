@@ -1,9 +1,10 @@
 package diaballik.model.memento;
 
-import java.util.Collection;
-import java.util.List;
-
 import diaballik.model.game.GameManager;
+
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 public class CareTakerGameManager {
 
@@ -19,11 +20,11 @@ public class CareTakerGameManager {
         return null;
     }
 
-    public void deleteGame(final int gameId) {
+    public void deleteGame(final Date gameId) {
 
     }
 
-    public GameManager loadGame(final int gameId) {
+    public GameManager loadGame(final Date gameId) {
         return null;
     }
 
