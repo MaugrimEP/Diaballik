@@ -27,10 +27,13 @@ public class StrProgressive extends StrategieIA {
     public Action reflechir(final Joueur joueur) {
         nbTourJoue++;
         final Action reflechie = currentStrategie.reflechir(joueur);
-        if (nbTourJoue > NB_TOUR_AVANT_CHANGEMENT * 3) {
+        if (nbTourJoue == NB_TOUR_AVANT_CHANGEMENT * 3) {
             currentStrategie = new StrStarting();
         }
         return reflechie;
     }
 
+    public StrategieIA getCurrentStrategie() {
+        return currentStrategie;
+    }
 }
