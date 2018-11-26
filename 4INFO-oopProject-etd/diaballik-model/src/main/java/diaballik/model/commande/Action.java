@@ -29,6 +29,10 @@ public class Action {
         this.plateau = plateau;
     }
 
+    public Plateau getPlateau() {
+        return plateau;
+    }
+
     public Coordonnee getArrivee() {
         return arrivee;
     }
@@ -66,5 +70,16 @@ public class Action {
                 "arrivee=" + arrivee +
                 ", depart=" + depart +
                 '}';
+    }
+
+    /**
+     * précondition : l'action est correcte
+     */
+    public void doAction() {
+        this.plateau.move(depart, arrivee);
+    }
+
+    public void undoAction() {
+        this.getPlateau().move(arrivee, depart);
     }
 }

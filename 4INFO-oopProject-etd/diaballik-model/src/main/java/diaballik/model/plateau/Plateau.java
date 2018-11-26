@@ -178,12 +178,12 @@ public abstract class Plateau {
      * précondition : coup bon = true
      * déplace le pion ou la balle
      *
-     * @param c1
-     * @param c2
+     * @param depart
+     * @param arrivee
      */
-    public void move(final Coordonnee c1, final Coordonnee c2) {
-        final Case caseDepart = lesCases.get(c1);
-        final Case caseArrivee = lesCases.get(c2);
+    public void move(final Coordonnee depart, final Coordonnee arrivee) {
+        final Case caseDepart = lesCases.get(depart);
+        final Case caseArrivee = lesCases.get(arrivee);
 
         if (caseDepart.hasBall()) {
             caseArrivee.setBalle(caseDepart.takeBall());
@@ -311,5 +311,44 @@ public abstract class Plateau {
             tableau.append("   ");
         });
         return tableau.toString();
+    }
+
+    private Coordonnee getBalleCoordonnes(final Joueur joueur) {
+        return lesCases.entrySet().stream().filter(coordonneeCaseEntry -> coordonneeCaseEntry.getValue().hasBall() && coordonneeCaseEntry.getValue().isTo(joueur)).findFirst().get().getKey();
+    }
+
+
+    private Collection<Coordonnee> getPionsCoordonnes(final Joueur joueur) {
+        return lesCases.entrySet().stream().
+                filter(coordonneeCaseEntry ->
+                        !coordonneeCaseEntry.getValue().isEmpty() &&
+                                !coordonneeCaseEntry.getValue().hasBall() &&
+                                coordonneeCaseEntry.getValue().isTo(joueur)).
+                map(Map.Entry::getKey).
+                collect(Collectors.toList());
+    }
+
+    public int distanceBalleToBordAdverse(final Joueur joueur) {
+        final Coordonnee balleCoordonnes = getBalleCoordonnes(joueur);
+        final boolean isJ1 = joueur.getGameManager().getJoueur1().equals(joueur);
+        return (int) balleCoordonnes.distanceTo(getLigneCoordonnee(isJ1 ? 0 : Plateau.SIZE - 1, Plateau.SIZE).get(balleCoordonnes.colonne));
+
+    }
+
+    public int distancePionsBordOppose(final Joueur joueur) {
+        final boolean isJ1 = joueur.getGameManager().getJoueur1().equals(joueur);
+        final int ligneJoueurAdverse = isJ1 ? 0 : Plateau.SIZE - 1;
+        final Collection<Coordonnee> pionsCoordonnes = getPionsCoordonnes(joueur);
+        return pionsCoordonnes.stream()
+                .map(coordonnee ->
+                        coordonnee.distanceTo(
+                                FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(ligneJoueurAdverse, coordonnee.colonne)))
+                .reduce((d1, d2) -> d1 + d2).get().intValue();
+    }
+
+    public int quantiteDInterceptionBalle(final Joueur joueur) {
+        final Coordonnee balleCoordonnes = getBalleCoordonnes(joueur.getGameManager().getJoueur1().equals(joueur) ? joueur.getGameManager().getJoueur2() : joueur.getGameManager().getJoueur1());
+        final Collection<Coordonnee> diagonal = balleCoordonnes.getDiagonal(Plateau.SIZE);
+        return diagonal.stream().map(coordonnee -> lesCases.get(coordonnee).asPionOnly() && lesCases.get(coordonnee).isTo(joueur) ? 1 : 0).reduce((integer, integer2) -> integer + integer2).get();
     }
 }

@@ -84,4 +84,12 @@ public abstract class Joueur {
     public int hashCode() {
         return Objects.hash(couleur, pseudo);
     }
+
+    public static String getColorConsoleJ1() {
+        return "\u001B[31m";
+    }
+
+    public static String getColorConsoleJ2() {
+        return "\u001B[32m";
+    }
 }

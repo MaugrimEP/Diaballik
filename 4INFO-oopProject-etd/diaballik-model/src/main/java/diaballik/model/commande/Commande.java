@@ -22,8 +22,8 @@ public class Commande {
         this.action = action;
     }
 
-    public void doAction() { //TODO
-
+    public void doAction() {
+        this.action.doAction();
     }
 
     @Override

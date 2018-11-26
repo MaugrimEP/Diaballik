@@ -90,15 +90,20 @@ public class Case {
 
     @Override
     public String toString() {
+        final String color = isEmpty() ? "\u001B[30m" : isTo(getPion().getJoueur().getGameManager().getJoueur1()) ? Joueur.getColorConsoleJ1() : Joueur.getColorConsoleJ2();
         if (hasBall()) {
-            return "| B ";
+            return color + "| B " + "\u001B[0m";
         } else if (!isEmpty()) {
-            return "| P ";
+            return color + "| P " + "\u001B[0m";
         }
-        return "|   ";
+        return color + "|   " + "\u001B[0m";
     }
 
     public Balle getBalle() {
         return balle;
+    }
+
+    public boolean asPionOnly() {
+        return !isEmpty() && !hasBall();
     }
 }
