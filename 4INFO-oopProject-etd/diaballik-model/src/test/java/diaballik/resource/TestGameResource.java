@@ -93,6 +93,5 @@ public class TestGameResource {
                 put(Entity.json(initGameClasses));
         GameManager gmres = res.readEntity(GameManager.class);
         Assertions.assertNull(gmres);
-
     }
 }

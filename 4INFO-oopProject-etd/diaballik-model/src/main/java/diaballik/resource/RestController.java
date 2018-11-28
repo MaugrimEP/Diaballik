@@ -58,10 +58,16 @@ public class RestController {
         if (Joueur.checkPlayerConsistency(j1, j2)) {
             final Plateau plateau = initGameClasses.getPlateau();
             final TypePartie typePartie = initGameClasses.getTypePartie();
-            return new GameManagerBuilder().joueur1(j1).joueur2(j2).plateau(plateau).typePartie(typePartie).build();
+            setGameManager(new GameManagerBuilder().joueur1(j1).joueur2(j2).plateau(plateau).typePartie(typePartie).build());
+            return gm;
         } else {
             return null; //comment retourner une erreur
         }
+    }
+
+    private void setGameManager(final GameManager gameManager) {
+        gm = gameManager;
+        careTakerGameManager.setCurrentGameManager(gm);
     }
 
     @PUT
@@ -108,6 +114,12 @@ public class RestController {
     }
 
     @GET
+    @Path("/game/save")
+    public void saveGame() {
+        careTakerGameManager.saveCurrentGame();
+    }
+
+    @GET
     @Path("/game/games")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
@@ -116,5 +128,5 @@ public class RestController {
                 .map(mem -> new SmallerGameManager(mem.getEtat().getJoueur1(), mem.getEtat().getJoueur2(), mem.getDate()))
                 .collect(Collectors.toList());
     }
-    
+
 }

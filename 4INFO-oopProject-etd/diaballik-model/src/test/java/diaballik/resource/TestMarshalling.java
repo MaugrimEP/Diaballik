@@ -19,9 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestMarshalling {
     static Stream<Object> getInstancesToMarshall() {
-        GameManager gm = new GameManager();
-        JoueurHumain j1 = new JoueurHumain(Color.RED, "ringo", gm);
-        JoueurHumain j2 = new JoueurHumain(Color.BLACK, "start", gm);
+        JoueurHumain j1 = new JoueurHumain(Color.RED, "ringo", null);
+        JoueurHumain j2 = new JoueurHumain(Color.BLACK, "start", null);
         InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauEnemyAmongUs(), TypePartie.TYPE_J_VS_J);
 
         GameManager gmA = new GameManagerBuilder().typePartie(initGameClasses.getTypePartie()).joueur1(initGameClasses.getJ1()).joueur2(initGameClasses.getJ2()).plateau(initGameClasses.getPlateau()).build();

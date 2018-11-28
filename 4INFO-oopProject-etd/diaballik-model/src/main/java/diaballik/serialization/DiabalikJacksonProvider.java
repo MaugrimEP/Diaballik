@@ -5,31 +5,34 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
-import java.awt.Color;
+import diaballik.model.coordonnee.Coordonnee;
+
 import javax.inject.Singleton;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
+import java.awt.Color;
 
 @Provider
 @Singleton
 public class DiabalikJacksonProvider implements ContextResolver<ObjectMapper> {
-	private final ObjectMapper mapper;
+    private final ObjectMapper mapper;
 
-	public DiabalikJacksonProvider() {
-		super();
-		mapper = new ObjectMapper().registerModule(new GuavaModule()).setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
-		final SimpleModule module = new SimpleModule();
-		module.addSerializer(Color.class, new ColorSerializer());
-		module.addDeserializer(Color.class, new ColorDeserializer());
-		mapper.registerModule(module);
-	}
+    public DiabalikJacksonProvider() {
+        super();
+        mapper = new ObjectMapper().registerModule(new GuavaModule()).setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        final SimpleModule module = new SimpleModule();
+        module.addSerializer(Color.class, new ColorSerializer());
+        module.addDeserializer(Color.class, new ColorDeserializer());
+        module.addKeyDeserializer(Coordonnee.class, new MapCoordonneeDeserializer());
+        mapper.registerModule(module);
+    }
 
-	public ObjectMapper getMapper() {
-		return mapper;
-	}
+    public ObjectMapper getMapper() {
+        return mapper;
+    }
 
-	@Override
-	public ObjectMapper getContext(final Class<?> type) {
-		return mapper;
-	}
+    @Override
+    public ObjectMapper getContext(final Class<?> type) {
+        return mapper;
+    }
 }

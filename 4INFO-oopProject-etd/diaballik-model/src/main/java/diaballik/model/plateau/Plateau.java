@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import diaballik.model.commande.Action;
 import diaballik.model.coordonnee.Coordonnee;
 import diaballik.model.coordonnee.FabriquePoidsMoucheCoordonnees;
-import diaballik.model.deserializer.MapCoordonneeDeserializer;
+import diaballik.serialization.MapCoordonneeDeserializer;
 import diaballik.model.exceptions.InvalidCoordinateException;
 import diaballik.model.joueur.Joueur;
 import diaballik.model.plateau.piece.Balle;

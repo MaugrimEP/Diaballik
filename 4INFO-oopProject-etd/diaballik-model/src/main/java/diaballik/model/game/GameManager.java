@@ -2,9 +2,11 @@ package diaballik.model.game;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import diaballik.model.commande.Action;
@@ -15,6 +17,7 @@ import diaballik.model.plateau.Plateau;
 import diaballik.model.states.AutomateGameManager;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,7 +27,15 @@ import java.util.Objects;
 // We add a unique identifier to the Json object
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonPropertyOrder({"joueur1", "joueur2", "automate", "plateau", "commandes"})
 public class GameManager {
+
+
+    @JsonManagedReference
+    private Joueur joueur1;
+
+    @JsonManagedReference
+    private Joueur joueur2;
 
     @JsonManagedReference
     private AutomateGameManager automate;
@@ -33,11 +44,6 @@ public class GameManager {
 
     private List<Commande> commandes;
 
-    @JsonManagedReference
-    private Joueur joueur1;
-
-    @JsonManagedReference
-    private Joueur joueur2;
 
     public GameManager() {
         commandes = new ArrayList<>();
@@ -52,9 +58,14 @@ public class GameManager {
         this.joueur2 = joueur2;
     }
 
-    public Plateau getPlateau() {
-        return plateau;
+    public Joueur getJoueur1() {
+        return joueur1;
     }
+
+    public Joueur getJoueur2() {
+        return joueur2;
+    }
+
 
     /**
      * @return la liste des commandes jouées dans ce coup
@@ -87,22 +98,26 @@ public class GameManager {
         return commandes.subList(commandes.size() - 1 - nb, commandes.size() - 1);
     }
 
+    public Plateau getPlateau() {
+        return plateau;
+    }
+
     public boolean gameFinished() {
         return plateau.isGameFinished(joueur1, joueur2);
     }
 
+    @JsonIgnore
     public Joueur getJoueurGagnant() {
         return plateau.getWinner(joueur1, joueur2);
     }
 
-    public MementoGameManager createMemento() {
-        return null;
+    public MementoGameManager createMemento() { //TODO
+        final MementoGameManager mgm = new MementoGameManager(new Date(), this);
+        mgm.saveFile();
+        return mgm;
     }
 
-    public void restoreMemento(final MementoGameManager memento) {
-
-    }
-
+    @JsonIgnore
     public Joueur getJoueurCourant() {
         return automate.getJoueurCourant();
     }
@@ -111,13 +126,6 @@ public class GameManager {
         return automate;
     }
 
-    public Joueur getJoueur1() {
-        return joueur1;
-    }
-
-    public Joueur getJoueur2() {
-        return joueur2;
-    }
 
     public void setJoueur1(final Joueur j) {
         this.joueur1 = j;

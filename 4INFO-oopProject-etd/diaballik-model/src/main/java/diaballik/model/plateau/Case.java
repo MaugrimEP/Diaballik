@@ -2,6 +2,7 @@ package diaballik.model.plateau;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -42,6 +43,7 @@ public class Case {
         this.balle = balle;
     }
 
+    @JsonIgnore
     public boolean isEmpty() {
         return pion == null;
     }
@@ -54,6 +56,7 @@ public class Case {
      * @param j
      * @return
      */
+    @JsonIgnore
     public boolean isTo(final Joueur j) {
         return !isEmpty() && pion.getJoueur().equals(j);
     }

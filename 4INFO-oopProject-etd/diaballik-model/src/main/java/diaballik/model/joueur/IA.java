@@ -17,6 +17,13 @@ public class IA extends Joueur {
         this.strategieIA = strategieIA;
     }
 
+    @Override
+    public void jouer() {
+        final Action a = reflechir();
+        getGameManager().ajouterAction(a);
+        getGameManager().performLastAction();
+    }
+
     public Action reflechir() {
         return strategieIA.reflechir(this);
     }

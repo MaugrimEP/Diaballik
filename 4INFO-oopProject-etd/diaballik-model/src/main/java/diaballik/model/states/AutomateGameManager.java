@@ -3,6 +3,7 @@ package diaballik.model.states;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -45,6 +46,7 @@ public class AutomateGameManager {
         return etatCourant.jouer(this);
     }
 
+    @JsonIgnore
     public Joueur getJoueurCourant() {
         return etatCourant.getJoueurCourant(this);
     }

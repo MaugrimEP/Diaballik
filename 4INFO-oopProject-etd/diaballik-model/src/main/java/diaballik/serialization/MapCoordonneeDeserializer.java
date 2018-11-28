@@ -1,4 +1,4 @@
-package diaballik.model.deserializer;
+package diaballik.serialization;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.KeyDeserializer;

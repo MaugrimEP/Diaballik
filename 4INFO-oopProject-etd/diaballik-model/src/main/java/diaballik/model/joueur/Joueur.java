@@ -27,6 +27,7 @@ public abstract class Joueur {
     private Color couleur;
 
     private String pseudo;
+
     @JsonBackReference
     private GameManager gameManager;
 
@@ -55,7 +56,7 @@ public abstract class Joueur {
     }
 
     public void jouer() {
-
+        gameManager.performLastAction();
     }
 
     public Color getCouleur() {
