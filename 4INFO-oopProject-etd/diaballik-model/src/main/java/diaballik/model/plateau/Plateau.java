@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 // We add a unique identifier to the Json object
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public abstract class Plateau {
-    public static int SIZE = 7;
+    public static final int SIZE = 7;
 
     @JsonDeserialize(keyUsing = MapCoordonneeDeserializer.class)
     protected Map<Coordonnee, Case> lesCases;

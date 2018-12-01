@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  */
 public class FabriquePoidsMoucheCoordonnees {
 
-    public static FabriquePoidsMoucheCoordonnees INSTANCE = new FabriquePoidsMoucheCoordonnees();
+    public static final FabriquePoidsMoucheCoordonnees INSTANCE = new FabriquePoidsMoucheCoordonnees();
 
     private List<List<Coordonnee>> coordonnees;
 

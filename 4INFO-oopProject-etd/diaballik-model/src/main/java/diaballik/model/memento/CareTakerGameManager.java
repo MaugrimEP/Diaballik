@@ -38,7 +38,7 @@ public class CareTakerGameManager {
         final Optional<MementoGameManager> toDelete = mementos.stream().filter(mementos -> mementos.getDate().equals(gameId)).findFirst();
         if (toDelete.isPresent()) {
             toDelete.get().deleteFile();
-            this.mementos.remove(toDelete);
+            this.mementos.remove(toDelete.get());
         }
     }
 
@@ -50,7 +50,10 @@ public class CareTakerGameManager {
         final File repertoire = new File(MementoGameManager.DIRECTORY);
         this.mementos.clear();
         if (repertoire.exists()) {
-            Arrays.asList(repertoire.listFiles()).stream().forEach(file -> mementos.add(MementoGameManager.fromFile(file)));
+            final File[] rep = repertoire.listFiles();
+            if (rep != null) {
+                Arrays.stream(rep).forEach(file -> mementos.add(MementoGameManager.fromFile(file)));
+            }
         }
     }
 

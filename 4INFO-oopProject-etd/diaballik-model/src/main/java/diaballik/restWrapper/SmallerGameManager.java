@@ -20,7 +20,7 @@ public class SmallerGameManager {
     public SmallerGameManager(@JsonProperty("joueur1") final Joueur joueur1, @JsonProperty("joueur2") final Joueur joueur2, @JsonProperty("date") final Date date) {
         this.joueur1 = joueur1;
         this.joueur2 = joueur2;
-        this.date = date;
+        this.date = new Date(date.getTime());
     }
 
     public Joueur getJoueur1() {
@@ -33,6 +33,6 @@ public class SmallerGameManager {
 
 
     public Date getDate() {
-        return date;
+        return new Date(date.getTime());
     }
 }
