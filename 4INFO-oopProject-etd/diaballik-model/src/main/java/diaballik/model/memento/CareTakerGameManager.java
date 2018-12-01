@@ -46,7 +46,7 @@ public class CareTakerGameManager {
      * crée la liste de mementos a partir des fichiers
      * écrase la liste si elle n'était pas vide
      */
-    public void loadMementosFiles() { //TODO
+    public void loadMementosFiles() {
         final File repertoire = new File(MementoGameManager.DIRECTORY);
         this.mementos.clear();
         if (repertoire.exists()) {

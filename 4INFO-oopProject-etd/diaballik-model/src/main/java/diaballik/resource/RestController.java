@@ -75,7 +75,6 @@ public class RestController {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
     public ResultOfAPlay jouer(final Action action) {
-
         final Joueur joueurCourant = gm.getJoueurCourant();
 
         List<Commande> commandes = new ArrayList<>();

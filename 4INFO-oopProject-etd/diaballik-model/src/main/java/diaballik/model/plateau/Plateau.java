@@ -10,11 +10,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import diaballik.model.commande.Action;
 import diaballik.model.coordonnee.Coordonnee;
 import diaballik.model.coordonnee.FabriquePoidsMoucheCoordonnees;
-import diaballik.serialization.MapCoordonneeDeserializer;
 import diaballik.model.exceptions.InvalidCoordinateException;
 import diaballik.model.joueur.Joueur;
 import diaballik.model.plateau.piece.Balle;
 import diaballik.model.plateau.piece.Pion;
+import diaballik.serialization.MapCoordonneeDeserializer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -71,7 +71,7 @@ public abstract class Plateau {
             Stream.iterate(-1, colonne -> colonne + 1).limit(3).forEach(colonne -> {
                 try {
                     final Coordonnee arrivee = FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(depart.ligne + ligne, depart.colonne + colonne);
-                    final Action action = new Action(arrivee, depart, this);
+                    final Action action = new Action(depart, arrivee, this);
                     if (coupBon(lesCases.get(depart).getPion().getJoueur(), action)) {
                         candidates.add(arrivee);
                     }
@@ -95,7 +95,7 @@ public abstract class Plateau {
         candidates.addAll(getLigneCoordonnee(depart.ligne, SIZE)); //on ajoute ligne non filtré
 
         final Set<Coordonnee> filtered = candidates.stream().filter(arrivee -> {
-            final Action action = new Action(arrivee, depart, this);
+            final Action action = new Action(depart, arrivee, this);
             return (coupBon(lesCases.get(depart).getPion().getJoueur(), action));
         }).collect(Collectors.toSet());
         return filtered;
@@ -214,10 +214,9 @@ public abstract class Plateau {
 
         final Case caseDepart = lesCases.get(depart);
 
-        final boolean caseVide = caseDepart.isEmpty();
-        final boolean departNotMine = !caseDepart.getPion().getJoueur().equals(joueur);
+        final boolean caseVideOrNotMine = caseDepart.isEmpty() || !caseDepart.getPion().getJoueur().equals(joueur);
 
-        if (caseVide || departNotMine) {
+        if (caseVideOrNotMine) {
             return false;
         }
 

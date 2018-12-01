@@ -20,7 +20,8 @@ public class PlateauRandomBall extends Plateau {
 
     @Override
     public void init(final Joueur j1, final Joueur j2) {
-        final int milieu = Plateau.SIZE / 2 + 1;
+        super.init(j1, j2);
+        final int milieu = Plateau.SIZE / 2;
         final Coordonnee milieuJ1 = FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(Plateau.SIZE - 1, milieu);
         final Coordonnee milieuJ2 = FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(0, milieu);
 

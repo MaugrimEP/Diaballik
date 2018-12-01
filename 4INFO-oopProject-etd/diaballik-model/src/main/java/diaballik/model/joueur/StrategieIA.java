@@ -43,10 +43,10 @@ public abstract class StrategieIA {
             final Coordonnee coordonnePiece = coordonneeCaseEntry.getKey();
             if (laCase.hasBall()) {
                 candidatesActions.addAll(plateau.candidatesCasesToMoveBall(coordonnePiece).stream()
-                        .map(arrive -> new Action(arrive, coordonnePiece, plateau)).collect(Collectors.toList())); //Récuperer l'ensemble des déplacement possible pour tout les pions
+                        .map(arrive -> new Action(coordonnePiece, arrive, plateau)).collect(Collectors.toList())); //Récuperer l'ensemble des déplacement possible pour tout les pions
             } else {
                 candidatesActions.addAll(plateau.candidatesCasesToMovePion(coordonnePiece).stream()
-                        .map(arrive -> new Action(arrive, coordonnePiece, plateau)).collect(Collectors.toList())); //Récuperer l'ensemble des déplacement possible pour la balle
+                        .map(arrive -> new Action(coordonnePiece, arrive, plateau)).collect(Collectors.toList())); //Récuperer l'ensemble des déplacement possible pour la balle
             }
         });
 

@@ -26,7 +26,7 @@ class MementoGameManagerTest {
 
     @BeforeEach
     void init() {
-        j1 = new JoueurHumain(Color.BLACK, "ringo", null);
+        j1 = new JoueurHumain(Color.BLACK, "ringo");
         j2 = new IA(Color.BLUE, "star", null, new StrProgressive());
         gameManager = new GameManagerBuilder()
                 .joueur1(j1)

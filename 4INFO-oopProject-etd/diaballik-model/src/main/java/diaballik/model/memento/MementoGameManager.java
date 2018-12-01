@@ -54,7 +54,7 @@ public class MementoGameManager {
     /**
      * sauvegarde l'état dans un fichier
      */
-    public void saveFile() { //TODO
+    public void saveFile() {
         final ObjectMapper mapper = new DiabalikJacksonProvider().getMapper();
         try {
             final String serializedObject = mapper.writeValueAsString(etat);
@@ -88,7 +88,7 @@ public class MementoGameManager {
     /**
      * supprime le fichier assiocié à un état
      */
-    public void deleteFile() { // TODO
+    public void deleteFile() {
         new File(getFileName()).delete();
     }
 }

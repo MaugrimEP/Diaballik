@@ -22,7 +22,7 @@ public class PlateauEnemyAmongUs extends Plateau {
 
     @Override
     public void init(final Joueur j1, final Joueur j2) {
-
+        super.init(j1, j2);
         final List<Coordonnee> ligneJ1 = getLigneCoordonnee(Plateau.SIZE - 1, Plateau.SIZE);
         final List<Coordonnee> ligneJ2 = getLigneCoordonnee(0, Plateau.SIZE);
 

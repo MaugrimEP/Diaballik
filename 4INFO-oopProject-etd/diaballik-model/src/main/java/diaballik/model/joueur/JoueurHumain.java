@@ -11,4 +11,8 @@ public class JoueurHumain extends Joueur {
     public JoueurHumain(@JsonProperty("couleur") final Color couleur, @JsonProperty("pseudo") final String pseudo, @JsonProperty("gm") final GameManager gm) {
         super(couleur, pseudo, gm);
     }
+
+    public JoueurHumain(final Color couleur, final String pseudo) {
+        this(couleur, pseudo, null);
+    }
 }

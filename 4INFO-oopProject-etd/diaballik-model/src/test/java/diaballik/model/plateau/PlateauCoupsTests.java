@@ -44,7 +44,7 @@ class PlateauCoupsTests {
         gameManager.getPlateau().move(FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(6, 0), arrive);
         System.out.println(gameManager.getPlateau());
 
-        assertTrue(gameManager.getPlateau().coupBon(j1, new Action(arrive, depart, gameManager.getPlateau())));
+        assertTrue(gameManager.getPlateau().coupBon(j1, new Action(depart, arrive, gameManager.getPlateau())));
 
     }
 
@@ -67,7 +67,31 @@ class PlateauCoupsTests {
     @ParameterizedTest
     @MethodSource("getParametersCoupBon")
     void testCoupBon(final Coordonnee depart, final Coordonnee arrive, final Boolean guard) {
-        assertEquals(guard, gameManager.getPlateau().coupBon(j1, new Action(arrive, depart, gameManager.getPlateau())));
+        assertEquals(guard, gameManager.getPlateau().coupBon(j1, new Action(depart, arrive, gameManager.getPlateau())));
+    }
+
+    @Test
+    void testStratPlateau() {
+        gameManager = new GameManagerBuilder()
+                .joueur1(j1)
+                .joueur2(j2)
+                .plateau(new PlateauStandard())
+                .typePartie(TypePartie.TYPE_J_VS_J).build();
+        System.out.println(gameManager.getPlateau());
+
+        gameManager = new GameManagerBuilder()
+                .joueur1(j1)
+                .joueur2(j2)
+                .plateau(new PlateauEnemyAmongUs())
+                .typePartie(TypePartie.TYPE_J_VS_J).build();
+        System.out.println(gameManager.getPlateau());
+
+        gameManager = new GameManagerBuilder()
+                .joueur1(j1)
+                .joueur2(j2)
+                .plateau(new PlateauRandomBall())
+                .typePartie(TypePartie.TYPE_J_VS_J).build();
+        System.out.println(gameManager.getPlateau());
     }
 
 }

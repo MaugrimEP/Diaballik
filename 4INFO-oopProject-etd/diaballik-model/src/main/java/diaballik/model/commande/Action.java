@@ -1,5 +1,6 @@
 package diaballik.model.commande;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -23,10 +24,15 @@ public class Action {
 
     private Plateau plateau;
 
-    public Action(@JsonProperty("arrivee") final Coordonnee arrivee, @JsonProperty("depart") final Coordonnee depart, @JsonProperty("plateau") final Plateau plateau) {
+    @JsonCreator
+    public Action(@JsonProperty("depart") final Coordonnee depart, @JsonProperty("arrivee") final Coordonnee arrivee, @JsonProperty("plateau") final Plateau plateau) {
+        this(depart, arrivee);
+        this.plateau = plateau;
+    }
+
+    public Action(@JsonProperty("depart") final Coordonnee depart, @JsonProperty("arrivee") final Coordonnee arrivee) {
         this.arrivee = arrivee;
         this.depart = depart;
-        this.plateau = plateau;
     }
 
     public Plateau getPlateau() {

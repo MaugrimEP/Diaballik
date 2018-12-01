@@ -1,16 +1,24 @@
 package diaballik.resource;
 
 import com.github.hanleyt.JerseyExtension;
+import diaballik.model.commande.Action;
+import diaballik.model.coordonnee.Coordonnee;
+import diaballik.model.coordonnee.FabriquePoidsMoucheCoordonnees;
 import diaballik.model.game.GameManager;
+import diaballik.model.game.GameManagerBuilder;
 import diaballik.model.game.TypePartie;
+import diaballik.model.joueur.IA;
+import diaballik.model.joueur.Joueur;
 import diaballik.model.joueur.JoueurHumain;
+import diaballik.model.joueur.StrStarting;
 import diaballik.model.plateau.PlateauEnemyAmongUs;
-import diaballik.model.states.AutomateGameManager;
-import diaballik.model.states.EtatJ1vsJ2;
+import diaballik.model.plateau.PlateauStandard;
 import diaballik.restWrapper.InitGameClasses;
+import diaballik.restWrapper.ResultOfAPlay;
 import diaballik.serialization.DiabalikJacksonProvider;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +36,9 @@ public class TestGameResource {
     @RegisterExtension
     JerseyExtension jerseyExtension = new JerseyExtension(this::configureJersey);
 
+    Joueur j1;
+    Joueur j2;
+
     private Application configureJersey() {
         return new ResourceConfig(RestController.class).
                 register(MyExceptionMapper.class).
@@ -38,6 +49,8 @@ public class TestGameResource {
 
     @BeforeEach
     void setUp() {
+        j1 = new JoueurHumain(Color.RED, "ringo");
+        j2 = new JoueurHumain(Color.BLACK, "start");
     }
 
     @Test
@@ -59,9 +72,7 @@ public class TestGameResource {
 		assertEquals("DDR ACE", matWithNewName.getName());
 		assertEquals(mat.getId(), matWithNewName.getId());*/
         client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
-        GameManager gm = new GameManager();
-        JoueurHumain j1 = new JoueurHumain(Color.RED, "ringo", gm);
-        JoueurHumain j2 = new JoueurHumain(Color.BLACK, "start", gm);
+
         InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauEnemyAmongUs(), TypePartie.TYPE_J_VS_J);
         final Response res = client.
                 target(baseUri).
@@ -70,21 +81,15 @@ public class TestGameResource {
                 put(Entity.json(initGameClasses));
         GameManager gmres = res.readEntity(GameManager.class);
 
-        GameManager gameManager = new GameManager(new AutomateGameManager(gm, new EtatJ1vsJ2()), new PlateauEnemyAmongUs(), null, j1, j2);
+        GameManager gameManager = new GameManagerBuilder().joueur1(j1).joueur2(j2).plateau(new PlateauEnemyAmongUs()).typePartie(TypePartie.TYPE_J_VS_J).build();
         Assertions.assertEquals(gameManager, gmres);
 
     }
 
     @Test
     void testInitGameWithInconsistentsPlayers(final Client client, final URI baseUri) {
-		/*Matiere mat = target("calendar/mat").request().post(Entity.xml(new Matiere("DDR",1900))).readEntity(Matiere.class);
-		Matiere matWithNewName = target("calendar/mat/"+mat.getId()+"/DDR ACE").request().put(Entity.text("")).readEntity(Matiere.class);
-		assertEquals("DDR ACE", matWithNewName.getName());
-		assertEquals(mat.getId(), matWithNewName.getId());*/
         client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
-        GameManager gm = new GameManager();
-        JoueurHumain j1 = new JoueurHumain(Color.RED, "ringo", gm);
-        JoueurHumain j2 = new JoueurHumain(Color.RED, "start", gm);//same color
+        j2 = new JoueurHumain(Color.RED, "start");
         InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauEnemyAmongUs(), TypePartie.TYPE_J_VS_J);
         final Response res = client.
                 target(baseUri).
@@ -94,4 +99,150 @@ public class TestGameResource {
         GameManager gmres = res.readEntity(GameManager.class);
         Assertions.assertNull(gmres);
     }
+
+    @Test
+    void testPlayWithAutomatePlayerVSPlayer(final Client client, final URI baseUri) {
+        client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
+        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_J);
+        Response res = client.
+                target(baseUri).
+                path("game/init").
+                request().
+                put(Entity.json(initGameClasses));
+        GameManager gmres = res.readEntity(GameManager.class);
+        Assertions.assertNotNull(gmres);
+
+        Action action = new Action(c(6, 0), c(5, 0));
+        res = client.
+                target(baseUri).
+                path("game/play").
+                request().
+                put(Entity.json(action));
+        ResultOfAPlay resultOfAPlay = res.readEntity(ResultOfAPlay.class);
+        Assert.assertEquals(1, resultOfAPlay.getActions().size());
+
+        action = new Action(c(5, 0), c(4, 0));
+
+        res = client.
+                target(baseUri).
+                path("game/play").
+                request().
+                put(Entity.json(action));
+        resultOfAPlay = res.readEntity(ResultOfAPlay.class);
+        Assert.assertEquals(1, resultOfAPlay.getActions().size());
+
+        action = new Action(c(4, 0), c(3, 0));
+
+        res = client.
+                target(baseUri).
+                path("game/play").
+                request().
+                put(Entity.json(action));
+        resultOfAPlay = res.readEntity(ResultOfAPlay.class);
+        Assert.assertEquals(1, resultOfAPlay.getActions().size());
+
+    }
+
+    @Test
+    void testPlayWithAutomatePlayerVSIA(final Client client, final URI baseUri) {
+        client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
+        j2 = new IA(Color.BLUE, "ia", null, new StrStarting());
+        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_IA);
+        Response res = client.
+                target(baseUri).
+                path("game/init").
+                request().
+                put(Entity.json(initGameClasses));
+        GameManager gmres = res.readEntity(GameManager.class);
+        Assertions.assertNotNull(gmres);
+
+        Action action = new Action(c(6, 0), c(5, 0));
+        res = client.
+                target(baseUri).
+                path("game/play").
+                request().
+                put(Entity.json(action));
+        ResultOfAPlay resultOfAPlay = res.readEntity(ResultOfAPlay.class);
+        Assert.assertEquals(1, resultOfAPlay.getActions().size());
+
+        action = new Action(c(5, 0), c(4, 0));
+
+        res = client.
+                target(baseUri).
+                path("game/play").
+                request().
+                put(Entity.json(action));
+        resultOfAPlay = res.readEntity(ResultOfAPlay.class);
+        Assert.assertEquals(1, resultOfAPlay.getActions().size());
+
+        action = new Action(c(4, 0), c(3, 0));
+
+        res = client.
+                target(baseUri).
+                path("game/play").
+                request().
+                put(Entity.json(action));
+        resultOfAPlay = res.readEntity(ResultOfAPlay.class);
+        Assert.assertEquals(4, resultOfAPlay.getActions().size());
+
+    }
+
+    @Test
+    void testLoadGame(final Client client, final URI baseUri) {
+        client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
+        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_IA);
+        Response res = client.
+                target(baseUri).
+                path("game/init").//TODO a changer et tester load
+                request().
+                put(Entity.json(initGameClasses));
+        GameManager gmres = res.readEntity(GameManager.class);
+
+    }
+
+    @Test
+    void testSaveGame(final Client client, final URI baseUri) {
+        client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
+        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_IA);
+        Response res = client.
+                target(baseUri).
+                path("game/init").//TODO a changer et tester save
+                request().
+                put(Entity.json(initGameClasses));
+        GameManager gmres = res.readEntity(GameManager.class);
+
+    }
+
+    @Test
+    void testGetListGames(final Client client, final URI baseUri) {
+        client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
+        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_IA);
+        Response res = client.
+                target(baseUri).
+                path("game/init").//TODO a changer et tester games
+                request().
+                put(Entity.json(initGameClasses));
+        GameManager gmres = res.readEntity(GameManager.class);
+
+    }
+
+    @Test
+    void testDeleteGame(final Client client, final URI baseUri) {
+        client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
+        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_IA);
+        Response res = client.
+                target(baseUri).
+                path("game/init").//TODO a changer et tester delete
+                request().
+                put(Entity.json(initGameClasses));
+        GameManager gmres = res.readEntity(GameManager.class);
+
+    }
+
+
+    static Coordonnee c(int c1, int c2) {
+        return FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(c1, c2);
+    }
+
+
 }

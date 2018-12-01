@@ -95,7 +95,7 @@ public class GameManager {
      * @return la liste des nb dernières actions
      */
     public List<Commande> getLastActions(final int nb) {
-        return commandes.subList(commandes.size() - 1 - nb, commandes.size() - 1);
+        return commandes.subList(commandes.size() - nb, commandes.size());
     }
 
     public Plateau getPlateau() {
@@ -111,7 +111,7 @@ public class GameManager {
         return plateau.getWinner(joueur1, joueur2);
     }
 
-    public MementoGameManager createMemento() { //TODO
+    public MementoGameManager createMemento() {
         final MementoGameManager mgm = new MementoGameManager(new Date(), this);
         mgm.saveFile();
         return mgm;
