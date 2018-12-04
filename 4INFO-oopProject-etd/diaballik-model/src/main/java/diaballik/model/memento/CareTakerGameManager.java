@@ -22,7 +22,8 @@ public class CareTakerGameManager {
     }
 
     public void saveCurrentGame() {
-        this.mementos.add(gameManager.createMemento());
+        final MementoGameManager memento = gameManager.createMemento();
+        this.mementos.add(memento);
     }
 
     public List<MementoGameManager> listMementos() {

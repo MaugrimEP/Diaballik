@@ -39,7 +39,9 @@ class StrStartingTest {
 
     @Test
     void distancePionsBordOppose() {
-        Assert.assertEquals(6 * (Plateau.SIZE - 1), gameManager.getPlateau().distancePionsBordOppose(j1));
+        final int distance = gameManager.getPlateau().distancePionsBordOppose(j1);
+        final int reference = 6 * (Plateau.SIZE - 1);
+        Assert.assertEquals(reference, distance);
 
     }
 

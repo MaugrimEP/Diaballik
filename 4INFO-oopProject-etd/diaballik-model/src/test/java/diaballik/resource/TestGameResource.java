@@ -11,6 +11,7 @@ import diaballik.model.joueur.IA;
 import diaballik.model.joueur.Joueur;
 import diaballik.model.joueur.JoueurHumain;
 import diaballik.model.joueur.StrStarting;
+import diaballik.model.memento.MementoGameManager;
 import diaballik.model.plateau.PlateauEnemyAmongUs;
 import diaballik.model.plateau.PlateauStandard;
 import diaballik.restWrapper.InitGameClasses;
@@ -62,15 +63,10 @@ public class TestGameResource {
                 path("foo/bar").
                 request().
                 put(Entity.text(""));
-
     }
 
     @Test
     void testInitGame(final Client client, final URI baseUri) {
-		/*Matiere mat = target("calendar/mat").request().post(Entity.xml(new Matiere("DDR",1900))).readEntity(Matiere.class);
-		Matiere matWithNewName = target("calendar/mat/"+mat.getId()+"/DDR ACE").request().put(Entity.text("")).readEntity(Matiere.class);
-		assertEquals("DDR ACE", matWithNewName.getName());
-		assertEquals(mat.getId(), matWithNewName.getId());*/
         client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
 
         InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauEnemyAmongUs(), TypePartie.TYPE_J_VS_J);
@@ -81,9 +77,11 @@ public class TestGameResource {
                 put(Entity.json(initGameClasses));
         GameManager gmres = res.readEntity(GameManager.class);
 
+//        System.out.println(gmres.getPlateau());
         GameManager gameManager = new GameManagerBuilder().joueur1(j1).joueur2(j2).plateau(new PlateauEnemyAmongUs()).typePartie(TypePartie.TYPE_J_VS_J).build();
-        Assertions.assertEquals(gameManager, gmres);
 
+        System.out.println(gameManager.getPlateau());
+        Assertions.assertEquals(gameManager, gmres);
     }
 
     @Test
@@ -203,14 +201,29 @@ public class TestGameResource {
     @Test
     void testSaveGame(final Client client, final URI baseUri) {
         client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
-        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_IA);
-        Response res = client.
+
+        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauEnemyAmongUs(), TypePartie.TYPE_J_VS_J);
+        final Response res1 = client.
                 target(baseUri).
-                path("game/init").//TODO a changer et tester save
+                path("game/init").
                 request().
                 put(Entity.json(initGameClasses));
-        GameManager gmres = res.readEntity(GameManager.class);
+        GameManager gmres = res1.readEntity(GameManager.class);
 
+        GameManager gameManager = new GameManagerBuilder().joueur1(j1).joueur2(j2).plateau(new PlateauEnemyAmongUs()).typePartie(TypePartie.TYPE_J_VS_J).build();
+        Assertions.assertEquals(gameManager, gmres);
+
+        System.out.println("resquete 1");
+
+        Response response = client.target(baseUri).path("game/save").request().get();
+        //MementoGameManager mementoGameManager = response.readEntity(MementoGameManager.class);
+        MementoGameManager mementoGameManager = RestController.careTakerGameManager.listMementos().get(0);
+        GameManager gmRecu = mementoGameManager.getEtat();
+
+        //GameManager gm = res1.readEntity(GameManager.class);
+
+
+        Assertions.assertEquals(gmres, gmRecu);
     }
 
     @Test
@@ -233,12 +246,10 @@ public class TestGameResource {
         Response res = client.
                 target(baseUri).
                 path("game/init").//TODO a changer et tester delete
-                request().
-                put(Entity.json(initGameClasses));
+                request()
+                .delete();
         GameManager gmres = res.readEntity(GameManager.class);
-
     }
-
 
     static Coordonnee c(int c1, int c2) {
         return FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(c1, c2);

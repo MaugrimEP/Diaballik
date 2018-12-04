@@ -338,11 +338,13 @@ public abstract class Plateau {
         final boolean isJ1 = joueur.getGameManager().getJoueur1().equals(joueur);
         final int ligneJoueurAdverse = isJ1 ? 0 : Plateau.SIZE - 1;
         final Collection<Coordonnee> pionsCoordonnes = getPionsCoordonnes(joueur);
+        return pionsCoordonnes.stream().mapToInt(coordonnee -> Math.abs(coordonnee.ligne - ligneJoueurAdverse)).reduce((i, i1) -> i + i1).getAsInt();
+                /*
         return pionsCoordonnes.stream()
                 .map(coordonnee ->
                         coordonnee.distanceTo(
                                 FabriquePoidsMoucheCoordonnees.INSTANCE.getCoordonnees(ligneJoueurAdverse, coordonnee.colonne)))
-                .reduce((d1, d2) -> d1 + d2).get().intValue();
+                .reduce((d1, d2) -> d1 + d2).get().intValue();*/
     }
 
     public int quantiteDInterceptionBalle(final Joueur joueur) {

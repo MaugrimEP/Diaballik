@@ -33,12 +33,11 @@ import java.util.stream.Collectors;
 public class RestController {
     private GameManager gm;
 
-    private CareTakerGameManager careTakerGameManager;
+    public static final CareTakerGameManager careTakerGameManager = new CareTakerGameManager();
 
     public RestController() {
         super();
         gm = null;
-        careTakerGameManager = new CareTakerGameManager();
     }
 
     @GET
@@ -95,7 +94,7 @@ public class RestController {
     }
 
     @DELETE
-    @Path("/game/{gameId}")
+    @Path("/{gameId}")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
     public void deleteGame(@PathParam("gameId") final Date gameId) {
@@ -103,7 +102,7 @@ public class RestController {
     }
 
     @GET
-    @Path("/game/{gameId}")
+    @Path("/{gameId}")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
     public GameManager loadGame(@PathParam("gameId") final Date gameId) {
@@ -113,13 +112,14 @@ public class RestController {
     }
 
     @GET
-    @Path("/game/save")
+    @Path("/save")
+    @Produces(MediaType.APPLICATION_JSON)
     public void saveGame() {
         careTakerGameManager.saveCurrentGame();
     }
 
     @GET
-    @Path("/game/games")
+    @Path("/games")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
     public List<SmallerGameManager> getListeOldParties() {
