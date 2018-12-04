@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -30,14 +29,11 @@ import java.util.Objects;
 @JsonPropertyOrder({"joueur1", "joueur2", "automate", "plateau", "commandes"})
 public class GameManager {
 
-
-    @JsonManagedReference
+    //@JsonManagedReference(value = "gameManager->joueur")
     private Joueur joueur1;
-
-    @JsonManagedReference
+    //@JsonManagedReference(value = "gameManager->joueur")
     private Joueur joueur2;
-
-    @JsonManagedReference
+    //@JsonManagedReference(value = "gameManager->automateGameManager")
     private AutomateGameManager automate;
 
     private Plateau plateau;

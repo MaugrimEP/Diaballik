@@ -38,6 +38,7 @@ public class RestController {
     public RestController() {
         super();
         gm = null;
+        //careTakerGameManager = new CareTakerGameManager();
     }
 
     @GET
@@ -48,7 +49,7 @@ public class RestController {
     }
 
     @PUT
-    @Path("/init/")
+    @Path("/init")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
     public GameManager initGame(final InitGameClasses initGameClasses) {
@@ -70,7 +71,7 @@ public class RestController {
     }
 
     @PUT
-    @Path("/play/")
+    @Path("/play")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
     public ResultOfAPlay jouer(final Action action) {
@@ -113,7 +114,6 @@ public class RestController {
 
     @GET
     @Path("/save")
-    @Produces(MediaType.APPLICATION_JSON)
     public void saveGame() {
         careTakerGameManager.saveCurrentGame();
     }

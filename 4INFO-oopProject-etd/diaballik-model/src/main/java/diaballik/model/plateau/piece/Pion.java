@@ -2,8 +2,6 @@ package diaballik.model.plateau.piece;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -14,10 +12,9 @@ import java.util.Objects;
 // We want to add a JSON attribute to know the type of the object.
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 // We add a unique identifier to the Json object
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
+@JsonIdentityInfo(scope = Pion.class, generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Pion {
 
-    @JsonManagedReference
     private Joueur joueur;
 
     @JsonCreator
@@ -42,8 +39,12 @@ public class Pion {
         return Objects.hash(joueur.getPseudo());
     }
 
-    @JsonIgnore
+
     public Joueur getJoueur() {
         return joueur;
+    }
+
+    public void setJoueur(final Joueur joueur) {
+        this.joueur = joueur;
     }
 }

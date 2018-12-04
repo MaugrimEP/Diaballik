@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import diaballik.model.coordonnee.Coordonnee;
+import diaballik.model.game.GameManager;
 
 import javax.inject.Singleton;
 import javax.ws.rs.ext.ContextResolver;
@@ -24,6 +25,7 @@ public class DiabalikJacksonProvider implements ContextResolver<ObjectMapper> {
         module.addSerializer(Color.class, new ColorSerializer());
         module.addDeserializer(Color.class, new ColorDeserializer());
         module.addKeyDeserializer(Coordonnee.class, new MapCoordonneeDeserializer());
+        module.addDeserializer(GameManager.class, new GameManagerDeserializer());
         mapper.registerModule(module);
     }
 

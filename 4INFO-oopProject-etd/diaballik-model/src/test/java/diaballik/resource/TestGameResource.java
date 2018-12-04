@@ -12,7 +12,6 @@ import diaballik.model.joueur.Joueur;
 import diaballik.model.joueur.JoueurHumain;
 import diaballik.model.joueur.StrStarting;
 import diaballik.model.memento.MementoGameManager;
-import diaballik.model.plateau.PlateauEnemyAmongUs;
 import diaballik.model.plateau.PlateauStandard;
 import diaballik.restWrapper.InitGameClasses;
 import diaballik.restWrapper.ResultOfAPlay;
@@ -28,9 +27,11 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.awt.Color;
 import java.net.URI;
+import java.util.List;
 
 public class TestGameResource {
     @SuppressWarnings("unused")
@@ -69,16 +70,16 @@ public class TestGameResource {
     void testInitGame(final Client client, final URI baseUri) {
         client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
 
-        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauEnemyAmongUs(), TypePartie.TYPE_J_VS_J);
+        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_J);
         final Response res = client.
                 target(baseUri).
                 path("game/init").
-                request().
+                request(MediaType.APPLICATION_JSON_TYPE).
                 put(Entity.json(initGameClasses));
         GameManager gmres = res.readEntity(GameManager.class);
 
-//        System.out.println(gmres.getPlateau());
-        GameManager gameManager = new GameManagerBuilder().joueur1(j1).joueur2(j2).plateau(new PlateauEnemyAmongUs()).typePartie(TypePartie.TYPE_J_VS_J).build();
+        System.out.println(gmres.getPlateau());
+        GameManager gameManager = new GameManagerBuilder().joueur1(j1).joueur2(j2).plateau(new PlateauStandard()).typePartie(TypePartie.TYPE_J_VS_J).build();
 
         System.out.println(gameManager.getPlateau());
         Assertions.assertEquals(gameManager, gmres);
@@ -88,7 +89,7 @@ public class TestGameResource {
     void testInitGameWithInconsistentsPlayers(final Client client, final URI baseUri) {
         client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
         j2 = new JoueurHumain(Color.RED, "start");
-        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauEnemyAmongUs(), TypePartie.TYPE_J_VS_J);
+        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_J);
         final Response res = client.
                 target(baseUri).
                 path("game/init").
@@ -202,7 +203,7 @@ public class TestGameResource {
     void testSaveGame(final Client client, final URI baseUri) {
         client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
 
-        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauEnemyAmongUs(), TypePartie.TYPE_J_VS_J);
+        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_J);
         final Response res1 = client.
                 target(baseUri).
                 path("game/init").
@@ -210,17 +211,12 @@ public class TestGameResource {
                 put(Entity.json(initGameClasses));
         GameManager gmres = res1.readEntity(GameManager.class);
 
-        GameManager gameManager = new GameManagerBuilder().joueur1(j1).joueur2(j2).plateau(new PlateauEnemyAmongUs()).typePartie(TypePartie.TYPE_J_VS_J).build();
-        Assertions.assertEquals(gameManager, gmres);
-
-        System.out.println("resquete 1");
-
         Response response = client.target(baseUri).path("game/save").request().get();
         //MementoGameManager mementoGameManager = response.readEntity(MementoGameManager.class);
-        MementoGameManager mementoGameManager = RestController.careTakerGameManager.listMementos().get(0);
-        GameManager gmRecu = mementoGameManager.getEtat();
+        List<MementoGameManager> memos = RestController.careTakerGameManager.listMementos();
 
-        //GameManager gm = res1.readEntity(GameManager.class);
+        final MementoGameManager mementoGameManager = memos.get(memos.size() - 1);
+        GameManager gmRecu = mementoGameManager.getEtat();
 
 
         Assertions.assertEquals(gmres, gmRecu);

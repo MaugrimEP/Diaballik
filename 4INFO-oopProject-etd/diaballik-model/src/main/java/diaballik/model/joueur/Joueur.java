@@ -1,8 +1,9 @@
 package diaballik.model.joueur;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -21,14 +22,15 @@ import java.util.Objects;
         @JsonSubTypes.Type(value = JoueurHumain.class),
         @JsonSubTypes.Type(value = IA.class)
 })
+@JsonIgnoreProperties(ignoreUnknown = true)
 // We add a unique identifier to the Json object
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
+@JsonIdentityInfo(scope = Joueur.class, generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public abstract class Joueur {
     private Color couleur;
 
     private String pseudo;
-
-    @JsonBackReference
+    //@JsonBackReference(value = "gameManager->joueur")
+    @JsonIgnore
     private GameManager gameManager;
 
     @JsonCreator
@@ -42,8 +44,7 @@ public abstract class Joueur {
         return gameManager;
     }
 
-    @JsonCreator
-    public Joueur(@JsonProperty("couleur") final Color couleur, @JsonProperty("pseudo") final String pseudo) {
+    public Joueur(final Color couleur, final String pseudo) {
         this(couleur, pseudo, null);
     }
 

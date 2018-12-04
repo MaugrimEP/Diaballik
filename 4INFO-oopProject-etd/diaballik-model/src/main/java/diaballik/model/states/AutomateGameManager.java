@@ -1,6 +1,5 @@
 package diaballik.model.states;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,10 +20,10 @@ import java.util.Objects;
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AutomateGameManager {
-
     private EtatTour etatCourant;
-
-    @JsonBackReference
+    //@JsonIdentityReference(alwaysAsId = true)
+    //@JsonBackReference(value = "gameManager->joueur")
+    @JsonIgnore
     private GameManager gameManager;
 
     @JsonCreator
@@ -51,6 +50,7 @@ public class AutomateGameManager {
         return etatCourant.getJoueurCourant(this);
     }
 
+    @JsonIgnore
     public GameManager getGameManager() {
         return gameManager;
     }

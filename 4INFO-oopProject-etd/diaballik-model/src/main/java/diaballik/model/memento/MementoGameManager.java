@@ -49,11 +49,10 @@ public class MementoGameManager {
             final Date date = new Date(Long.parseLong(dateWithExtension.split("\\.")[0]));
             final ObjectMapper mapper = new DiabalikJacksonProvider().getMapper();
             final GameManager gm = mapper.readValue(json, GameManager.class);
-
             return new MementoGameManager(date, gm);
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             if (br != null) {
                 try {
                     br.close();
