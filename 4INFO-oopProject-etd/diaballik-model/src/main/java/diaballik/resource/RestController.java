@@ -12,6 +12,8 @@ import diaballik.restWrapper.InitGameClasses;
 import diaballik.restWrapper.ResultOfAPlay;
 import diaballik.restWrapper.SmallerGameManager;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
@@ -41,17 +43,12 @@ public class RestController {
         //careTakerGameManager = new CareTakerGameManager();
     }
 
-    @GET
-    @Path("/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String welcom() {
-        return "{ \"coucou\" : \"hhi\"}";
-    }
-
     @PUT
     @Path("/init")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Initialize a game",
+            response = GameManager.class)
     public GameManager initGame(final InitGameClasses initGameClasses) {
         final Joueur j1 = initGameClasses.getJ1();
         final Joueur j2 = initGameClasses.getJ2();
@@ -74,6 +71,8 @@ public class RestController {
     @Path("/play")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Jouer un coup",
+            response = ResultOfAPlay.class)
     public ResultOfAPlay jouer(final Action action) {
         final Joueur joueurCourant = gm.getJoueurCourant();
 
@@ -98,7 +97,8 @@ public class RestController {
     @Path("/{gameId}")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
-    public void deleteGame(@PathParam("gameId") final Date gameId) {
+    @ApiOperation(value = "Supprime une partie enregistrée")
+    public void deleteGame(@ApiParam(value = "identifiant de la partie", required = true) @PathParam("gameId") final Date gameId) {
         careTakerGameManager.deleteGame(gameId);
     }
 
@@ -106,7 +106,9 @@ public class RestController {
     @Path("/{gameId}")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
-    public GameManager loadGame(@PathParam("gameId") final Date gameId) {
+    @ApiOperation(value = "Charge une partie enregistrée",
+            response = GameManager.class)
+    public GameManager loadGame(@ApiParam(value = "identifiant de la partie") @PathParam("gameId") final Date gameId) {
         final GameManager gameManager = careTakerGameManager.loadGame(gameId);
         gm = gameManager;
         return gameManager;
@@ -114,6 +116,7 @@ public class RestController {
 
     @GET
     @Path("/save")
+    @ApiOperation(value = "Sauvegarde la partie actuelle")
     public void saveGame() {
         careTakerGameManager.saveCurrentGame();
     }
@@ -122,6 +125,7 @@ public class RestController {
     @Path("/games")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Donne la liste des parties enregistrées")
     public List<SmallerGameManager> getListeOldParties() {
         return careTakerGameManager.listMementos().stream()
                 .map(mem -> new SmallerGameManager(mem.getEtat().getJoueur1(), mem.getEtat().getJoueur2(), mem.getDate()))
