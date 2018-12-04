@@ -128,7 +128,7 @@ public class RestController {
     @ApiOperation(value = "Donne la liste des parties enregistrées")
     public List<SmallerGameManager> getListeOldParties() {
         return careTakerGameManager.listMementos().stream()
-                .map(mem -> new SmallerGameManager(mem.getEtat().getJoueur1(), mem.getEtat().getJoueur2(), mem.getDate()))
+                .map(mem -> mem.toSmall())
                 .collect(Collectors.toList());
     }
 

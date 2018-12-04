@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import diaballik.model.joueur.Joueur;
 
 import java.util.Date;
+import java.util.Objects;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
@@ -31,8 +32,26 @@ public class SmallerGameManager {
         return joueur2;
     }
 
-
     public Date getDate() {
         return new Date(date.getTime());
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final SmallerGameManager that = (SmallerGameManager) o;
+        return Objects.equals(joueur1, that.joueur1) &&
+                Objects.equals(joueur2, that.joueur2) &&
+                Objects.equals(date, that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(joueur1, joueur2, date);
     }
 }

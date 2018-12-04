@@ -15,6 +15,7 @@ import diaballik.model.memento.MementoGameManager;
 import diaballik.model.plateau.PlateauStandard;
 import diaballik.restWrapper.InitGameClasses;
 import diaballik.restWrapper.ResultOfAPlay;
+import diaballik.restWrapper.SmallerGameManager;
 import diaballik.serialization.DiabalikJacksonProvider;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -27,6 +28,7 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.awt.Color;
@@ -225,13 +227,32 @@ public class TestGameResource {
     @Test
     void testGetListGames(final Client client, final URI baseUri) {
         client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
-        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_IA);
-        Response res = client.
+
+        List<MementoGameManager> mementoGameManagers = RestController.careTakerGameManager.listMementos();
+        for (MementoGameManager mgm : mementoGameManagers) {
+            RestController.careTakerGameManager.deleteGame(mgm.getDate());
+        }
+
+        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_J);
+        GameManager gm = client.
                 target(baseUri).
-                path("game/init").//TODO a changer et tester games
+                path("game/init").
                 request().
-                put(Entity.json(initGameClasses));
-        GameManager gmres = res.readEntity(GameManager.class);
+                put(Entity.json(initGameClasses)).readEntity(GameManager.class);
+        client.target(baseUri).path("game/save").request().get();
+        client.target(baseUri).path("game/save").request().get();
+        client.target(baseUri).path("game/save").request().get();
+        client.target(baseUri).path("game/save").request().get();
+        client.target(baseUri).path("game/save").request().get();
+
+        List<SmallerGameManager> r_gameList = client.target(baseUri).path("game/games").request().get(new GenericType<List<SmallerGameManager>>() {
+        });
+        List<MementoGameManager> mementoGameManagers2 = RestController.careTakerGameManager.listMementos();
+
+        Assertions.assertEquals(5, r_gameList.size());
+        for (MementoGameManager mgm : mementoGameManagers2) {
+            Assertions.assertTrue(r_gameList.contains(mgm.toSmall()));
+        }
 
     }
 

@@ -4,6 +4,7 @@ package diaballik.model.memento;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import diaballik.model.exceptions.MyIOMemoException;
 import diaballik.model.game.GameManager;
+import diaballik.restWrapper.SmallerGameManager;
 import diaballik.serialization.DiabalikJacksonProvider;
 
 import java.io.BufferedReader;
@@ -26,6 +27,10 @@ public class MementoGameManager {
     public MementoGameManager(final Date date, final GameManager etat) {
         this.date = new Date(date.getTime());
         this.etat = etat;
+    }
+
+    public SmallerGameManager toSmall() {
+        return new SmallerGameManager(getEtat().getJoueur1(), getEtat().getJoueur2(), getDate());
     }
 
     /**
