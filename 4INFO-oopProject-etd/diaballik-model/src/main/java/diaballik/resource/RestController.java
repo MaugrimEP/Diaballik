@@ -98,7 +98,8 @@ public class RestController {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Supprime une partie enregistrée")
-    public void deleteGame(@ApiParam(value = "identifiant de la partie", required = true) @PathParam("gameId") final Date gameId) {
+    public void deleteGame(@ApiParam(value = "identifiant de la partie", required = true) @PathParam("gameId") final long gameIdLong) {
+        final Date gameId = new Date(gameIdLong);
         careTakerGameManager.deleteGame(gameId);
     }
 
@@ -108,7 +109,8 @@ public class RestController {
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Charge une partie enregistrée",
             response = GameManager.class)
-    public GameManager loadGame(@ApiParam(value = "identifiant de la partie") @PathParam("gameId") final Date gameId) {
+    public GameManager loadGame(@ApiParam(value = "identifiant de la partie") @PathParam("gameId") final long gameIdLong) {
+        final Date gameId = new Date(gameIdLong);
         final GameManager gameManager = careTakerGameManager.loadGame(gameId);
         gm = gameManager;
         return gameManager;

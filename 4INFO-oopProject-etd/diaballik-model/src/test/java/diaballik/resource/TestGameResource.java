@@ -12,6 +12,7 @@ import diaballik.model.joueur.Joueur;
 import diaballik.model.joueur.JoueurHumain;
 import diaballik.model.joueur.StrStarting;
 import diaballik.model.memento.MementoGameManager;
+import diaballik.model.plateau.PlateauEnemyAmongUs;
 import diaballik.model.plateau.PlateauStandard;
 import diaballik.restWrapper.InitGameClasses;
 import diaballik.restWrapper.ResultOfAPlay;
@@ -33,6 +34,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.awt.Color;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestGameResource {
@@ -188,17 +190,36 @@ public class TestGameResource {
 
     }
 
+    private void deleteAllGame() {
+        RestController.careTakerGameManager.listMementos()
+                .forEach(mementoGameManager -> RestController.careTakerGameManager.deleteGame(mementoGameManager.getDate()));
+    }
+
     @Test
     void testLoadGame(final Client client, final URI baseUri) {
         client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
-        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_IA);
-        Response res = client.
-                target(baseUri).
-                path("game/init").//TODO a changer et tester load
-                request().
-                put(Entity.json(initGameClasses));
-        GameManager gmres = res.readEntity(GameManager.class);
 
+        deleteAllGame();
+
+        InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_J);
+        GameManager gm = client.target(baseUri).path("game/init").request().put(Entity.json(initGameClasses)).readEntity(GameManager.class);
+        client.target(baseUri).path("game/save").request().get();
+
+        InitGameClasses initGameClasses2 = new InitGameClasses(j1, j2, new PlateauEnemyAmongUs(), TypePartie.TYPE_J_VS_J);
+        GameManager gm2 = client.target(baseUri).path("game/init").request().put(Entity.json(initGameClasses2)).readEntity(GameManager.class);
+        client.target(baseUri).path("game/save").request().get();
+
+        List<SmallerGameManager> r_gameList = client.target(baseUri).path("game/games").request().get(new GenericType<List<SmallerGameManager>>() {
+        });
+
+        for (SmallerGameManager sgm : r_gameList) {
+            String path = baseUri + "game/" + sgm.getDate().getTime() + "/";
+            System.out.println(path);
+            GameManager gameManager = client.target(path)
+                    .request().get()
+                    .readEntity(GameManager.class);
+            Assertions.assertTrue(gameManager.equals(gm) && !gameManager.equals(gm2) || gameManager.equals(gm2) && !gameManager.equals(gm));
+        }
     }
 
     @Test
@@ -258,14 +279,28 @@ public class TestGameResource {
 
     @Test
     void testDeleteGame(final Client client, final URI baseUri) {
+        deleteAllGame();
+
         client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
         InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_IA);
-        Response res = client.
-                target(baseUri).
-                path("game/init").//TODO a changer et tester delete
-                request()
-                .delete();
-        GameManager gmres = res.readEntity(GameManager.class);
+
+        client.target(baseUri).path("game/init").request().put(Entity.json(initGameClasses)).readEntity(GameManager.class);
+
+        client.target(baseUri).path("game/save").request().get();
+        client.target(baseUri).path("game/save").request().get();
+        client.target(baseUri).path("game/save").request().get();
+        client.target(baseUri).path("game/save").request().get();
+
+        client.target(baseUri).path("game/games").request().get(new GenericType<List<SmallerGameManager>>() {
+        }).stream().forEach(smallerGameManager -> {
+            Assertions.assertTrue(RestController.careTakerGameManager.listMementos().stream()
+                    .anyMatch(mementoGameManager -> mementoGameManager.getDate().equals(smallerGameManager.getDate())));
+
+            client.target(baseUri).path("game/" + smallerGameManager.getDate().getTime() + "/").request().delete();
+
+            Assertions.assertTrue(RestController.careTakerGameManager.listMementos().stream().noneMatch(mementoGameManager -> mementoGameManager.getDate().equals(smallerGameManager.getDate())));
+        });
+
     }
 
     static Coordonnee c(int c1, int c2) {
