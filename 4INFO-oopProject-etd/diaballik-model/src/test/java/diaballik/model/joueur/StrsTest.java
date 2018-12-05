@@ -49,7 +49,7 @@ class StrsTest {
         StrNoob strNoob = new StrNoob();
         Collection<Action> candidateActions = strNoob.getCandidateActions(j1);
         System.out.println(candidateActions);
-        assertEquals(6, candidateActions.size());
+        assertEquals(8, candidateActions.size());
 
     }
 
@@ -73,7 +73,7 @@ class StrsTest {
         Collection<Action> candidateActions = strNoob.getCandidateActions(j1);
         System.out.println(candidateActions);
         System.out.println(gameManager.getPlateau());
-        assertEquals(9, candidateActions.size());
+        assertEquals(4, candidateActions.size());
 
     }
 }
