@@ -8,7 +8,7 @@ import { MenuComponent } from './menu/menu.component';
 
 const appRoutes: Routes = [
   { path: 'menu',
-    component:MenuComponent,
+    component: MenuComponent,
   },
   { path: '',
     redirectTo: '/config',
