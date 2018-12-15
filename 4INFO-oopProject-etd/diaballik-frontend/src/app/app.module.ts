@@ -4,17 +4,22 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
+import { MenuComponent } from './menu/menu.component';
 
 const appRoutes: Routes = [
+  { path: 'menu',
+    component:MenuComponent,
+  },
   { path: '',
     redirectTo: '/config',
     pathMatch: 'full'
-  }
+  },
 ];
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MenuComponent
   ],
   imports: [
     RouterModule.forRoot(

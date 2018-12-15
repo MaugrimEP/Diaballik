@@ -1,0 +1,31 @@
+
+<div id="last_games"></div>
+  <div id="settings">
+    <div id="joueurs">
+        <div id="joueur1">
+          Name <input type="text" (input)="joueur1.name = $event.target.value" name="joueur1_name" [(value)]="joueur1.name">
+          Color <input type="color" name="joueur1_color" value="{{joueur1.color}}">
+        </div>
+
+
+        <div id="joueur2">
+            Name <input type="text" name="joueur2_name" value="{{joueur2.name}}">
+            Color <input type="color" name="joueur2_color" value="{{joueur2.color}}">
+            IA <input type="checkbox" name="ia_selected"   checked="{{joueur2.ia}}">
+            <div id="id_level">
+                <input type="radio" name="ia_level" value="noob" [checked]="joueur2.niveau_ia === IA_level.Noob" [disabled]="!joueur2.ia"> Noob
+                <input type="radio" name="ia_level" value="starting" [checked]="joueur2.niveau_ia === IA_level.Starting" [disabled]="!joueur2.ia"> Starting
+                <input type="radio" name="ia_level" value="progressive" [checked]="joueur2.niveau_ia === IA_level.Progressive" [disabled]="!joueur2.ia"> Progressive
+            </div>
+        </div>
+    </div>
+
+
+    <div id="game_scenario">
+        <input type="radio" name="scenario" value="standard" checked> Standard
+        <input type="radio" name="scenario" value="random"> Random
+        <input type="radio" name="scenario" value="enemy"> Enemy
+    </div>
+  </div>
+  <button id="start_game">Start Game</button>
+  <button id="testid" (click)="testFunction()">Test Button</button>
