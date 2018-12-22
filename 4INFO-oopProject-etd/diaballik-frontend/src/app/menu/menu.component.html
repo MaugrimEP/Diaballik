@@ -1,70 +1,76 @@
+<div id="last_games" class="navbar-right">
+  <app-last-game></app-last-game>
+</div>
+<div id="settings">
+  <div id="joueurs" class="col-md-12">
+    <div id="joueur1" class="form-horizontal col-md-3 col-lg-3 border">
 
-<div id="last_games"></div>
-  <div id="settings">
-    <div id="joueurs" class="col-md-12">
-        <div id="joueur1" class="form-horizontal col-md-3 col-lg-3 border">
-
-            <div class="form-group">
-                <label class="col-md-2 col-lg-2 control-label">Name</label> 
-                <div class="col-md-10 col-lg-10">
-                <input type="text" name="joueur1_name" (input)="joueur1.name = $event.target.value" [(value)]="joueur1.name" class="form-control" placeholder="example : Kibo Ryousukeke">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-md-2 col-lg-2 control-label">Color</label> 
-                <div class="col-md-10 col-lg-10">
-                <input type="color" name="joueur1_color" (input)="joueur1.color = $event.target.value"  [(value)]="joueur1.color" class="form-control">
-                </div>
-            </div>
+      <div class="form-group">
+        <label class="col-md-2 col-lg-2 control-label">Name</label>
+        <div class="col-md-10 col-lg-10">
+          <input type="text" name="joueur1_name" (input)="joueur1.name = $event.target.value" [(value)]="joueur1.name"
+                 class="form-control" placeholder="example : Kibo Ryousukeke">
         </div>
+      </div>
 
-
-        <div id="joueur2" class="form-horizontal col-md-3 col-lg-3">
-
-                <div class="form-group">
-                    <label class="col-md-2 col-lg-2 control-label">Name</label> 
-                    <div class="col-md-10 col-lg-10">
-                    <input type="text" name="joueur2_name" (input)="joueur2.name = $event.target.value" [(value)]="joueur2.name" class="form-control" placeholder="example : Maugrim le bg">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-md-2 col-lg-2 control-label">Color</label> 
-                    <div class="col-md-10 col-lg-10">
-                    <input type="color" name="joueur2_color" (input)="joueur2.color = $event.target.value"  [(value)]="joueur2.color" class="form-control">
-                    </div>
-                </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10 col-lg-10">
-                    <div class="checkbox">
-                        <label>
-                                <input type="checkbox" name="ia_selected" (input)="joueur2.ia = $event.target.checked" [(checked)]="joueur2.ia" class="form-control"> IA
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div id="id_level">
-                <input type="radio" name="ia_level" value="noob" (input)="joueur2.niveau_ia = $event.target.value" 
-                [(checked)]="joueur2.niveau_ia === IA_level.Noob" [disabled]="!joueur2.ia"> Noob
-
-                <input type="radio" name="ia_level" value="starting" (input)="joueur2.niveau_ia = $event.target.value"
-                [(checked)]="joueur2.niveau_ia === IA_level.Starting" [disabled]="!joueur2.ia"> Starting
-
-                <input type="radio" name="ia_level" value="progressive" (input)="joueur2.niveau_ia = $event.target.value"
-                [(checked)]="joueur2.niveau_ia === IA_level.Progressive" [disabled]="!joueur2.ia"> Progressive
-            </div>
+      <div class="form-group">
+        <label class="col-md-2 col-lg-2 control-label">Color</label>
+        <div class="col-md-10 col-lg-10">
+          <input type="color" name="joueur1_color" (input)="joueur1.color = $event.target.value"
+                 [(value)]="joueur1.color" class="form-control">
         </div>
+      </div>
     </div>
 
 
-    <div id="game_scenario">
-        <input type="radio" name="scenario" value="standard" checked (input)="scenario = $event.target.value"> Standard
-        <input type="radio" name="scenario" value="random" (input)="scenario = $event.target.value"> Random
-        <input type="radio" name="scenario" value="enemy" (input)="scenario = $event.target.value"> Enemy
+    <div id="joueur2" class="form-horizontal col-md-3 col-lg-3">
+
+      <div class="form-group">
+        <label class="col-md-2 col-lg-2 control-label">Name</label>
+        <div class="col-md-10 col-lg-10">
+          <input type="text" name="joueur2_name" (input)="joueur2.name = $event.target.value" [(value)]="joueur2.name"
+                 class="form-control" placeholder="example : Maugrim le bg">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-2 col-lg-2 control-label">Color</label>
+        <div class="col-md-10 col-lg-10">
+          <input type="color" name="joueur2_color" (input)="joueur2.color = $event.target.value"
+                 [(value)]="joueur2.color" class="form-control">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-10 col-lg-10">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="ia_selected" (input)="joueur2.ia = $event.target.checked"
+                     [(checked)]="joueur2.ia" class="form-control"> IA
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div id="id_level">
+        <input type="radio" name="ia_level" value="noob" (input)="joueur2.niveau_ia = $event.target.value"
+               [(checked)]="joueur2.niveau_ia === IA_level.Noob" [disabled]="!joueur2.ia"> Noob
+
+        <input type="radio" name="ia_level" value="starting" (input)="joueur2.niveau_ia = $event.target.value"
+               [(checked)]="joueur2.niveau_ia === IA_level.Starting" [disabled]="!joueur2.ia"> Starting
+
+        <input type="radio" name="ia_level" value="progressive" (input)="joueur2.niveau_ia = $event.target.value"
+               [(checked)]="joueur2.niveau_ia === IA_level.Progressive" [disabled]="!joueur2.ia"> Progressive
+      </div>
     </div>
   </div>
-  <button id="start_game">Start Game</button>
-  <button id="testid" (click)="testFunction()">Test Button</button>
+
+
+  <div id="game_scenario">
+    <input type="radio" name="scenario" value="standard" checked (input)="scenario = $event.target.value"> Standard
+    <input type="radio" name="scenario" value="random" (input)="scenario = $event.target.value"> Random
+    <input type="radio" name="scenario" value="enemy" (input)="scenario = $event.target.value"> Enemy
+  </div>
+</div>
+<button id="start_game">Start Game</button>
+<button id="testid" (click)="testFunction()">Test Button</button>
