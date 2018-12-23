@@ -1,6 +1,7 @@
 import {Component, OnInit, Injectable} from '@angular/core';
 import {Player} from '../../model/Player';
 import {IA_level} from '../../model/Player';
+import {PlateauType} from '../../model/PlateauType';
 
 @Component({
   selector: 'app-menu',
@@ -12,16 +13,15 @@ import {IA_level} from '../../model/Player';
 export class MenuComponent implements OnInit {
 
   IA_level = IA_level;
-  Scenario = Scenario;
-
-  scenario: Scenario;
+  Scenario = PlateauType;
+  scenario: PlateauType;
   joueur1: Player;
   joueur2: Player;
 
   constructor() {
     this.joueur1 = new Player('#FFF', 'Tsiry', false);
     this.joueur2 = new Player('#000', 'William', true);
-    this.scenario = Scenario.Standard;
+    this.scenario = PlateauType.Standard;
   }
 
   ngOnInit() {
@@ -36,9 +36,5 @@ export class MenuComponent implements OnInit {
   }
 }
 
-export enum Scenario {
-  Standard = 'standard',
-  Random = 'random',
-  Enemy = 'enemy',
-}
+
 

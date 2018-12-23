@@ -45,7 +45,10 @@ public abstract class Plateau {
 
     @JsonCreator
     protected Plateau(@JsonProperty("lesCases") final Map<Coordonnee, Case> lesCases) {
-        this.lesCases = lesCases;
+        this();
+        if (lesCases != null) {
+            this.lesCases = lesCases;
+        }
     }
 
     /**

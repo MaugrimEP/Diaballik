@@ -16,7 +16,7 @@ export class Player {
 
   static from(joueur: string) {
     const j = JSON.parse(joueur);
-    return new Player(j.couleur, j.pseudo, !(j.type === 'JoueurHumain'));
+    return new Player(j.couleur.code, j.pseudo, !(j.type === 'JoueurHumain'), j.hasOwnProperty('@id') ? j['@id'] : 0);
   }
 }
 

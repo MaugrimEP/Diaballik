@@ -1,5 +1,7 @@
 package diaballik.resource;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.hanleyt.JerseyExtension;
 import diaballik.model.commande.Action;
 import diaballik.model.coordonnee.Coordonnee;
@@ -34,7 +36,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.awt.Color;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TestGameResource {
@@ -75,6 +76,13 @@ public class TestGameResource {
         client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
 
         InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_J);
+        final ObjectMapper mapper = new DiabalikJacksonProvider().getMapper();
+        try {
+            final String serializedObject = mapper.writeValueAsString(initGameClasses);
+            System.out.println(serializedObject);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         final Response res = client.
                 target(baseUri).
                 path("game/init").
