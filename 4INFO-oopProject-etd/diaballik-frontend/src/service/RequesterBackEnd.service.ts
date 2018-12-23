@@ -38,7 +38,7 @@ export class RequesterBackEndService {
     );
   }
 
-  initGame(j1: Player, j2: Player, plateau: PlateauType) {
+  initGame(j1: Player, j2: Player, plateau: PlateauType,) {
     const req = '{\n' +
       '  "type": "InitGameClasses",\n' +
       '  "@id": 1,\n' +
@@ -462,10 +462,10 @@ export class RequesterBackEndService {
       '  },\n' +
       '  "commandes": []\n' +
       '}';
-    return new Promise<ShortGameInfo[]>((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       setTimeout(
         () => {
-          resolve(); // TODO
+          resolve(JSON.parse(response)); // TODO
         }, 3000);
     });
   }

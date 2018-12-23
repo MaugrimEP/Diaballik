@@ -7,11 +7,16 @@ import {AppComponent} from './app.component';
 import {MenuComponent} from './menu/menu.component';
 import {LastGameComponent} from './last-game/last-game.component';
 import {RequesterBackEndService} from '../service/RequesterBackEnd.service';
+import { BoardComponent } from './board/board.component';
 
 const appRoutes: Routes = [
   {
     path: 'menu',
     component: MenuComponent,
+  },
+  {
+    path: 'board',
+    component: BoardComponent,
   },
   {
     path: '',
@@ -24,7 +29,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     MenuComponent,
-    LastGameComponent
+    LastGameComponent,
+    BoardComponent
   ],
   imports: [
     RouterModule.forRoot(
