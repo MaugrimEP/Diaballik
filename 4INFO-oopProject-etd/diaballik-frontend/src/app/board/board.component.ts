@@ -15,6 +15,9 @@ export class BoardComponent implements OnInit {
   joueur2:Player;
   board : Board;
 
+  selectedLigne;
+  selectedColonne;
+
   constructor(requesterBackEnd: RequesterBackEndService) {
     this.board = new Board();
     
@@ -55,14 +58,17 @@ export class BoardComponent implements OnInit {
     for(let ligne=0;ligne<7;++ligne){
       for(let colonne=0;colonne<7;++colonne){
         let tile = this.board.get(ligne, colonne);
-        let spanCase = document.querySelector(`li[data-ligne="${ligne}"][data-colonne="${colonne}"]>span`);
-        spanCase.className = this.getClassTile(ligne,  colonne);
+        this.getSpan(ligne, colonne).className = this.getClassTile(ligne,  colonne);
       }
     }
   }
 
   getLi(ligne:number, colonne:number){
     return document.querySelector(`li[data-ligne="${ligne}"][data-colonne="${colonne}"]`);
+  }
+
+  getSpan(ligne:number, colonne:number){
+    return this.getLi(ligne, colonne).querySelector(`span`);
   }
 
   getClassTile(ligne:number, colonne:number):string {
@@ -83,8 +89,47 @@ export class BoardComponent implements OnInit {
     return player == this.joueur1 ? 'pieceJoueur1' : 'pieceJoueur2'; 
   }
 
-  addPossibility(ligne:number, colonne:number, joueur:Player) : void {
-    let li = this.getLi(ligne, colonne);
-    li.querySelector(`span`).classList.add(`piece choice ${this.getClassCouleurJoueur(joueur)}`);
+  select(ligne: number, colonne:number){
+    if(this.selectedLigne!=null && this.selectedColonne!=null){
+      this.deselect(this.selectedLigne, this.selectedColonne);
+      this.clearPossibilty();
+    }
+    if(this.selectedLigne!=ligne || this.selectedColonne != colonne) {
+      this.getSpan(ligne, colonne).classList.add("selected");
+      this.selectedLigne = ligne;
+      this.selectedColonne = colonne;
+
+      let possibiltys = [];
+      if(this.board.isPion(ligne, colonne)){
+        possibiltys = this.board.getPionPossibility(ligne,colonne);
+      }
+      if(this.board.isBall(ligne, colonne)){
+        possibiltys = this.board.getBallPossiblity(ligne, colonne);
+      }
+      for(let i=0; i<possibiltys.length; ++i){
+        this.addPossibility(possibiltys[i].ligne, 
+                            possibiltys[i].colonne,
+                            this.board.get(ligne, colonne).player,
+                            false);
+      }
+    }
+  }
+
+  deselect(ligne: number, colonne:number){
+    this.getSpan(ligne, colonne).classList.remove("selected");
+  }
+
+  clearPossibilty(){
+    for(let ligne=0; ligne<7; ++ligne){
+      for(let colonne=0; colonne<7; ++colonne){
+        if(this.board.isEmpty(ligne,colonne)){
+          this.getSpan(ligne, colonne).className ="";
+        }
+      }
+    }
+  }
+
+  addPossibility(ligne:number, colonne:number, joueur:Player, isBall:boolean) : void {
+    this.getSpan(ligne, colonne).className = `piece choice ${this.getClassCouleurJoueur(joueur)} ${isBall ? "ball" : ""}`;
   }
 }

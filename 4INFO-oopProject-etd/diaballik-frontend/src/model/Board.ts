@@ -1,4 +1,5 @@
 import {Player} from './Player';
+import { fromEventPattern } from 'rxjs';
 
 export class Board {
 
@@ -37,6 +38,24 @@ export class Board {
 
     isPion(ligne:number, colonne:number):boolean {
         return this.get(ligne, colonne).pion == Pion.pion; 
+    }
+
+    getPionPossibility(ligne:number, colonne:number) : any[] {
+        let possibilitys = []
+        for(let addLigne=-1;addLigne<=1;++addLigne){
+            for(let addColonne=-1;addColonne<=1;++addColonne){
+                try{
+                    if(this.get(ligne+addLigne, colonne+addColonne).isEmpty())
+                    possibilitys.push({ligne:ligne+addLigne, colonne:colonne+addColonne});
+                }catch(e){ }
+            }
+        }
+        return possibilitys;
+    }
+
+    getBallPossiblity(ligne: number, colonne:number) : any[]{
+        let possibilitys = [];
+        return possibilitys;
     }
 }
 
