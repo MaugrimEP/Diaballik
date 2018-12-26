@@ -93,10 +93,12 @@ export class BoardComponent implements OnInit {
     if(this.selectedLigne!=null && this.selectedColonne!=null){
       this.deselect(this.selectedLigne, this.selectedColonne);
       this.clearPossibilty();
+      this.selectedLigne = null;
+      this.selectedColonne = null;
     }
-    if(this.selectedLigne!=ligne || this.selectedColonne != colonne) {
+    {
       this.getSpan(ligne, colonne).classList.add("selected");
-      this.selectedLigne = ligne;
+      this.selectedLigne   = ligne;
       this.selectedColonne = colonne;
 
       let possibiltys = [];
