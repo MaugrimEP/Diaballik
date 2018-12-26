@@ -15,10 +15,10 @@ export class BoardComponent implements OnInit {
   joueur2:Player;
   board : Board;
 
-  selectedLigne;
-  selectedColonne;
+  selectedLigne : number;
+  selectedColonne : number;
 
-  constructor(requesterBackEnd: RequesterBackEndService) {
+  constructor(private requesterBackEnd: RequesterBackEndService) {
     this.board = new Board();
     
     let reponse = requesterBackEnd.initGame(
@@ -87,6 +87,25 @@ export class BoardComponent implements OnInit {
 
   getClassCouleurJoueur(player:Player){
     return player == this.joueur1 ? 'pieceJoueur1' : 'pieceJoueur2'; 
+  }
+
+  clickOnTile(ligne: number, colonne:number):void {
+    console.log("click on tile");
+    let clickedSpan = this.getSpan(ligne, colonne);
+    if(clickedSpan.classList.contains("choice")){//dans ce cas on est sur un des mouvements possible et dans ce cas on envoit au serveur
+      console.log("coupe joué");
+      return;
+    }
+    if(this.board.isEmpty(ligne, colonne)){//l'utilisateur a cliqué sur une case vide dans ce cas on clear la liste des possibilitées
+      console.log("clear possibilitées")
+      this.clearPossibilty();
+      return;
+    }
+    if(!this.board.isEmpty(ligne, colonne)){ // il faudra sélectioner la piece actuelle
+      console.log("selected");
+      this.select(ligne, colonne);
+      return;
+    }
   }
 
   select(ligne: number, colonne:number){
