@@ -33,11 +33,11 @@ export class Player {
 
 
     return `{
-        'type' : '${this.typeIA ? 'IA' : 'joueurHumain'}',
-        'couleur' : {
-            'code' : ${this.color}
+        "type" : "${this.typeIA ? 'IA' : 'joueurHumain'}",
+        "couleur" : {
+            "code" : "${this.color}"
           },
-        'pseudo' : ${this.name}
+        "pseudo" : "${this.name}"
         ${strIa}
       }\n
     `;

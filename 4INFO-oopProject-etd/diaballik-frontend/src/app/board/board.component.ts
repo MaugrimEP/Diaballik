@@ -35,7 +35,6 @@ export class BoardComponent implements OnInit {
     const boardThis = this;
 
     reponse.then((infos: any) => {
-      console.log(infos);
       this.joueur1 = Player.fromJSON(infos.joueur1);
       this.joueur2 = Player.fromJSON(infos.joueur2);
 

@@ -9,6 +9,7 @@ import {MenuComponent} from './menu/menu.component';
 import {LastGameComponent} from './last-game/last-game.component';
 import {RequesterBackEndService} from '../service/RequesterBackEnd.service';
 import {BoardComponent} from './board/board.component';
+import {LoadGameComponent} from './load-game/load-game.component';
 
 const appRoutes: Routes = [
   {
@@ -18,12 +19,16 @@ const appRoutes: Routes = [
   {
     path: 'board',
     component: BoardComponent,
+  }, {
+    path: 'load/:gameid',
+    component: LoadGameComponent
   },
   {
     path: '',
-    redirectTo: '/config',
+    redirectTo: '/menu',
     pathMatch: 'full'
   },
+
 ];
 
 @NgModule({
@@ -31,7 +36,8 @@ const appRoutes: Routes = [
     AppComponent,
     MenuComponent,
     LastGameComponent,
-    BoardComponent
+    BoardComponent,
+    LoadGameComponent
   ],
   imports: [
     RouterModule.forRoot(

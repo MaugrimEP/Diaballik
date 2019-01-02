@@ -1,5 +1,6 @@
 <ul class="list-group">
-  <li class="list-group-item" *ngFor="let lastGame of lastGames |async"> {{lastGame.date |date}}
+  <li routerLinkActive="active" class="list-group-item" *ngFor="let lastGame of lastGames |async">
+    <a [routerLink]="['/load',lastGame.date.getTime()]">{{lastGame.date |date}}</a>
     , {{lastGame.joueur1.name}}
     vs {{lastGame.joueur2.name}} </li>
 </ul>

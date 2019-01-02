@@ -2,7 +2,7 @@ import {ShortGameInfo} from '../model/ShortGameInfo';
 import {Player} from '../model/Player';
 import {ResultOfAPlay} from '../model/ResultOfAPlay';
 import {PlateauType} from '../model/PlateauType';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Action} from '../model/Action';
 
@@ -63,23 +63,20 @@ export class RequesterBackEndService {
       '    "' + typePartie + '"\n' +
       '  ]\n' +
       '}';
+    console.log(JSON.parse(req));
+
     return new Promise((resolve, reject) => {
-        resolve(JSON.parse(RequesterBackEndService.getHardCodeRepInit()));
-      }
-    );
-    // console.log(req);
-    /*  return new Promise((resolve, reject) => {
-        this.httpClient
-          .post('localhost:4444/init', req)
-          .subscribe(
-            (response) => {
-              resolve(response);
-            },
-            (error) => { // for test, TODO delete à la fin
-              resolve(this.getHardCodeRepInit());
-            }
-          );
-      });*/
+      this.httpClient
+        .put('/game/init', JSON.parse(req))
+        .subscribe(
+          (response) => {
+            resolve(response);
+          },
+          (error) => { // for test, TODO delete à la fin
+            // resolve(RequesterBackEndService.getHardCodeRepInit());
+          }
+        );
+    });
   }
 
   play(action: Action): Promise<ResultOfAPlay> {
