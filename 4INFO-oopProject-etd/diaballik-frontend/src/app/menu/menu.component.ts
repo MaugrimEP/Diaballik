@@ -1,9 +1,11 @@
 import {Component, OnInit, Injectable} from '@angular/core';
 import {Player} from '../../model/Player';
+import {Coordonnee} from '../../model/Coordonnee';
 import {IA_level} from '../../model/Player';
 import {PlateauType} from '../../model/PlateauType';
 import {RequesterBackEndService} from '../../service/RequesterBackEnd.service';
 import {Router} from '@angular/router';
+import {Action} from '../../model/Action';
 
 @Component({
   selector: 'app-menu',
@@ -41,6 +43,11 @@ export class MenuComponent implements OnInit {
   startNewGame() {
     this.router.navigate(['board']);
   }
+
+  /*testPlay() {
+    let resultOfAPlayPromise = this.requester.play(new Action(new Coordonnee(6, 0), new Coordonnee(5, 0)));
+    resultOfAPlayPromise.then(res => console.log(res));
+  }*/
 }
 
 

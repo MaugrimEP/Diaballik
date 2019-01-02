@@ -1,8 +1,10 @@
 import {ShortGameInfo} from '../model/ShortGameInfo';
 import {Player} from '../model/Player';
+import {ResultOfAPlay} from '../model/ResultOfAPlay';
 import {PlateauType} from '../model/PlateauType';
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {Action} from '../model/Action';
 
 @Injectable()
 export class RequesterBackEndService {
@@ -45,7 +47,7 @@ export class RequesterBackEndService {
     );
   }
 
-  initGame(j1: Player, j2: Player, plateau: PlateauType)  {
+  initGame(j1: Player, j2: Player, plateau: PlateauType) {
     let typePartie = 'TYPE_J_VS_J';
     if (j2.typeIA) {
       typePartie = 'TYPE_J_VS_IA';
@@ -78,6 +80,29 @@ export class RequesterBackEndService {
             }
           );
       });*/
+  }
+
+  play(action: Action): Promise<ResultOfAPlay> {
+    const req = '{\n' +
+      '  "type": "Action",\n' +
+      '  "depart": {\n' +
+      '    "type": "Coordonnee",\n' +
+      `   "ligne": ${action.depart.ligne},\n` +
+      `    "colonne": ${action.depart.colonne}\n` +
+      '  },\n' +
+      '  "arrivee": {\n' +
+      '    "type": "Coordonnee",\n' +
+      `    "ligne": ${action.arrivee.ligne},\n'` +
+      `    "colonne": ${action.arrivee.colonne}\n` +
+      '  },\n' +
+      '  "plateau": null\n' + // TODO test si on delete
+      '}';
+
+    return new Promise((resolve, reject) => {
+        resolve(ResultOfAPlay.fromJSON(JSON.parse(RequesterBackEndService.getHardCodeRepPlay())));
+      }
+    );
+
   }
 
   static getHardCodeRepInit(): string {
@@ -475,5 +500,32 @@ export class RequesterBackEndService {
       '  },\n' +
       '  "commandes": []\n' +
       '}';
+  }
+
+  static getHardCodeRepPlay(): string {
+    return `{
+  "type": "ResultOfAPlay",
+  "@id": 1,
+  "actions": [
+    {
+      "type": "Action",
+      "@id": 2,
+      "depart": {
+        "type": "Coordonnee",
+        "@id": 3,
+        "ligne": 6,
+        "colonne": 0
+      },
+      "arrivee": {
+        "type": "Coordonnee",
+        "@id": 4,
+        "ligne": 5,
+        "colonne": 0
+      }
+    }
+   ],
+  "gameWon": false,
+  "winner": 1
+  }`;
   }
 }

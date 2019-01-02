@@ -275,13 +275,13 @@ public abstract class Plateau {
     }
 
     private boolean hasJ1Won(final Joueur j1) {
-        final List<Coordonnee> ligneBas = getLigneCoordonnee(Plateau.SIZE - 1, Plateau.SIZE);
-        return ligneBas.stream().anyMatch((c) -> lesCases.get(c).hasBall() && lesCases.get(c).getBalle().getJoueur().equals(j1));
+        final List<Coordonnee> ligneHaut = getLigneCoordonnee(0, Plateau.SIZE); //j2 est en haut
+        return ligneHaut.stream().anyMatch((c) -> lesCases.get(c).hasBall() && lesCases.get(c).getBalle().getJoueur().equals(j1));
     }
 
     private boolean hasJ2Won(final Joueur j2) {
-        final List<Coordonnee> ligneHaut = getLigneCoordonnee(0, Plateau.SIZE); //j1 est en haut
-        return ligneHaut.stream().anyMatch((c) -> lesCases.get(c).hasBall() && lesCases.get(c).getBalle().getJoueur().equals(j2));
+        final List<Coordonnee> ligneBas = getLigneCoordonnee(Plateau.SIZE - 1, Plateau.SIZE);//j1 est en bas
+        return ligneBas.stream().anyMatch((c) -> lesCases.get(c).hasBall() && lesCases.get(c).getBalle().getJoueur().equals(j2));
     }
 
     /**
