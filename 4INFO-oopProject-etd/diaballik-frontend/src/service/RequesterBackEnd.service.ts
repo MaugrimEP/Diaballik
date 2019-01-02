@@ -120,6 +120,22 @@ export class RequesterBackEndService {
     }));
   }
 
+  getGameRegistrered(gameId: string) {
+    return new Promise(((resolve, reject) => {
+      this.httpClient
+        .get(`localhost:4444/game/${gameId}`)
+        .subscribe(
+          (res: string) => {
+            resolve(JSON.parse(res));
+          },
+          (error) => {
+            reject();
+          }
+        );
+    }));
+  }
+
+
   static getHardCodeRepInit(): string {
     return '{\n' +
       '  "type": "GameManager",\n' +
