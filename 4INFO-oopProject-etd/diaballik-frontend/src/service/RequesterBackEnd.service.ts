@@ -105,6 +105,21 @@ export class RequesterBackEndService {
 
   }
 
+  save() {
+    return new Promise(((resolve, reject) => {
+      this.httpClient
+        .get('localhost:4444/save')
+        .subscribe(
+          () => {
+            resolve();
+          },
+          (error) => {
+            reject();
+          }
+        );
+    }));
+  }
+
   static getHardCodeRepInit(): string {
     return '{\n' +
       '  "type": "GameManager",\n' +
