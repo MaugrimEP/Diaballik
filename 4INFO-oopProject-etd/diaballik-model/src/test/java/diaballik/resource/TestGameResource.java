@@ -159,6 +159,15 @@ public class TestGameResource {
         client.register(JacksonFeature.class).register(DiabalikJacksonProvider.class).register(RestController.class);
         j2 = new IA(Color.BLUE, "ia", null, new StrStarting());
         InitGameClasses initGameClasses = new InitGameClasses(j1, j2, new PlateauStandard(), TypePartie.TYPE_J_VS_IA);
+
+        try {
+            final ObjectMapper mapper = new DiabalikJacksonProvider().getMapper();
+            final String serializedObject = mapper.writeValueAsString(initGameClasses);
+            System.out.println(serializedObject);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         Response res = client.
                 target(baseUri).
                 path("game/init").

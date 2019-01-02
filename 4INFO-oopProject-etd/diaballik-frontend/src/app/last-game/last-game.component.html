@@ -1,6 +1,5 @@
-<nav class="navbar">
-  <ul class="list-group-item">
-    <li class="row" *ngFor="let lastGame of lastGames |async"> {{lastGame.date |date}}, {{lastGame.joueur1.name}}
-      vs {{lastGame.joueur2.name}} </li>
-  </ul>
-</nav>
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let lastGame of lastGames |async"> {{lastGame.date |date}}
+    , {{lastGame.joueur1.name}}
+    vs {{lastGame.joueur2.name}} </li>
+</ul>

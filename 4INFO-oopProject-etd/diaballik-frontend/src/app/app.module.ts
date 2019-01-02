@@ -1,13 +1,14 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
+import {FormsModule} from '@angular/forms';
 
 import {RouterModule, Routes} from '@angular/router';
 import {AppComponent} from './app.component';
 import {MenuComponent} from './menu/menu.component';
 import {LastGameComponent} from './last-game/last-game.component';
 import {RequesterBackEndService} from '../service/RequesterBackEnd.service';
-import { BoardComponent } from './board/board.component';
+import {BoardComponent} from './board/board.component';
 
 const appRoutes: Routes = [
   {
@@ -38,7 +39,8 @@ const appRoutes: Routes = [
       {enableTracing: false}
     ),
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [
     RequesterBackEndService

@@ -11,8 +11,8 @@ export class ShortGameInfo {
     const parsed = JSON.parse(json);
     for (const elem of parsed) {
       games.push(new ShortGameInfo(
-        Player.from(JSON.stringify(elem.joueur1)),
-        Player.from(JSON.stringify(elem.joueur2)),
+        Player.fromJSON(elem.joueur1),
+        Player.fromJSON(elem.joueur2),
         new Date(+elem.date))
       );
     }

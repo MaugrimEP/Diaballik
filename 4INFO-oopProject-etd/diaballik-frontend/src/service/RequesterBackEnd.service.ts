@@ -1,8 +1,15 @@
 import {ShortGameInfo} from '../model/ShortGameInfo';
 import {Player} from '../model/Player';
 import {PlateauType} from '../model/PlateauType';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 
+@Injectable()
 export class RequesterBackEndService {
+
+
+  constructor(private httpClient: HttpClient) {
+  }
 
   getListShortGame(): Promise<ShortGameInfo[]> {
     return new Promise<ShortGameInfo[]>((resolve, reject) => {
@@ -38,37 +45,43 @@ export class RequesterBackEndService {
     );
   }
 
-  initGame(j1: Player, j2: Player, plateau: PlateauType,) {
+  initGame(j1: Player, j2: Player, plateau: PlateauType)  {
+    let typePartie = 'TYPE_J_VS_J';
+    if (j2.typeIA) {
+      typePartie = 'TYPE_J_VS_IA';
+    }
+
     const req = '{\n' +
       '  "type": "InitGameClasses",\n' +
-      '  "@id": 1,\n' +
-      '  "j1": {\n' +
-      '    "type": "JoueurHumain",\n' +
-      '    "@id": 1,\n' +
-      '    "couleur": {\n' +
-      '      "code": "#FF0000"\n' +
-      '    },\n' +
-      '    "pseudo": "ringo"\n' +
-      '  },\n' +
-      '  "j2": {\n' +
-      '    "type": "JoueurHumain",\n' +
-      '    "@id": 2,\n' +
-      '    "couleur": {\n' +
-      '      "code": "#000000"\n' +
-      '    },\n' +
-      '    "pseudo": "start"\n' +
-      '  },\n' +
-      '  "plateau": {\n' +
-      '    "type": "PlateauStandard",\n' +
-      '    "@id": 2\n' +
-      '  },\n' +
+      '  "j1": ' + j1.toJSON() + ',' +
+      '  "j2":' + j2.toJSON() + ',' +
+      '  "plateau": { "type": "' + plateau + '"},\n' +
       '  "typePartie": [\n' +
       '    "TypePartie",\n' +
-      '    "TYPE_J_VS_J"\n' +
+      '    "' + typePartie + '"\n' +
       '  ]\n' +
       '}';
+    return new Promise((resolve, reject) => {
+        resolve(JSON.parse(RequesterBackEndService.getHardCodeRepInit()));
+      }
+    );
+    // console.log(req);
+    /*  return new Promise((resolve, reject) => {
+        this.httpClient
+          .post('localhost:4444/init', req)
+          .subscribe(
+            (response) => {
+              resolve(response);
+            },
+            (error) => { // for test, TODO delete à la fin
+              resolve(this.getHardCodeRepInit());
+            }
+          );
+      });*/
+  }
 
-    const response = '{\n' +
+  static getHardCodeRepInit(): string {
+    return '{\n' +
       '  "type": "GameManager",\n' +
       '  "@id": 1,\n' +
       '  "joueur1": {\n' +
@@ -462,13 +475,5 @@ export class RequesterBackEndService {
       '  },\n' +
       '  "commandes": []\n' +
       '}';
-    return new Promise((resolve, reject) => {
-      setTimeout(
-        () => {
-          resolve(JSON.parse(response)); // TODO
-        }, 3000);
-    });
   }
-
-
 }

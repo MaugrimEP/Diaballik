@@ -2,6 +2,8 @@ import {Component, OnInit, Injectable} from '@angular/core';
 import {Player} from '../../model/Player';
 import {IA_level} from '../../model/Player';
 import {PlateauType} from '../../model/PlateauType';
+import {RequesterBackEndService} from '../../service/RequesterBackEnd.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -13,15 +15,16 @@ import {PlateauType} from '../../model/PlateauType';
 export class MenuComponent implements OnInit {
 
   IA_level = IA_level;
-  Scenario = PlateauType;
   scenario: PlateauType;
   joueur1: Player;
   joueur2: Player;
+  Scenario: any;
 
-  constructor() {
-    this.joueur1 = new Player('#FFF', 'Tsiry', false);
-    this.joueur2 = new Player('#000', 'William', true);
+  constructor(private requester: RequesterBackEndService, private router: Router) {
+    this.joueur1 = new Player('#ffffff', 'Tsiry', false);
+    this.joueur2 = new Player('#000000', 'William', true);
     this.scenario = PlateauType.Standard;
+    this.Scenario = PlateauType;
   }
 
   ngOnInit() {
@@ -33,6 +36,10 @@ export class MenuComponent implements OnInit {
     joueur 2  => ${this.joueur2}
     scenario  => ${this.scenario}
     `);
+  }
+
+  startNewGame() {
+    this.router.navigate(['board']);
   }
 }
 

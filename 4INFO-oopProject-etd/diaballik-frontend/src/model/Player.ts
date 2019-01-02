@@ -13,7 +13,7 @@ export class Player {
 
   }
 
-  public toString() : string {
+  public toString(): string {
     return `
       {
         name : ${this.name}
@@ -23,13 +23,33 @@ export class Player {
       }`;
   }
 
+  public toJSON(): string {
+    let strIa = '';
+    if (this.typeIA) {
+      strIa = `,\n"strategieIA": {
+        "type": "${this.niveau_ia}"
+        }`;
+    }
 
-  static from(joueur: string) {
-    const j = JSON.parse(joueur);
-    return new Player(j.couleur.code, j.pseudo, !(j.type === 'JoueurHumain'), j.hasOwnProperty('@id') ? j['@id'] : 0);
+
+    return `{
+        'type' : '${this.typeIA ? 'IA' : 'joueurHumain'}',
+        'couleur' : {
+            'code' : ${this.color}
+          },
+        'pseudo' : ${this.name}
+        ${strIa}
+      }\n
+    `;
   }
 
-  static fromJSON(j){
+
+  /* static from(joueur: string) {
+     const j = JSON.parse(joueur);
+     return new Player(j.couleur.code, j.pseudo, !(j.type === 'JoueurHumain'), j.hasOwnProperty('@id') ? j['@id'] : 0);
+   }*/
+
+  static fromJSON(j) {
     return new Player(j.couleur.code, j.pseudo, !(j.type === 'JoueurHumain'), j.hasOwnProperty('@id') ? j['@id'] : 0);
   }
 }

@@ -1,5 +1,5 @@
 export enum PlateauType {
-  Standard = 'PlateauEnemyAmongUs',
+  Standard = 'PlateauStandard',
   Random = 'PlateauRandomBall',
-  Enemy = 'PlateauStandard',
+  Enemy = 'PlateauEnemyAmongUs',
 }
