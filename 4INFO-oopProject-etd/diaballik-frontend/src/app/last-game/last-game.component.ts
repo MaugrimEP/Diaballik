@@ -24,7 +24,7 @@ export class LastGameComponent implements OnInit {
 
   selectOneGame(date: Date, joueur1: Player, joueur2: Player) {
     Transmetter.data = {
-      'date': Date,
+      'date': date,
       'j1': joueur1,
       'j2': joueur2
     };

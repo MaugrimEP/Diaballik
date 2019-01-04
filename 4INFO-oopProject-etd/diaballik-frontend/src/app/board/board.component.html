@@ -1,31 +1,32 @@
-
 <body>
-		<div class="joueur2-points">
-			<span data-player="1" class="name">{{joueur1?.name}}</span>
-			<div class="joueur2-score">
-				<span class="number"></span>
-				<span class="joueur2-round"></span>
-			</div>
-		</div>
-		<span class="separ-score"></span>
-		<div class="joueur1-points">
-			<div class="joueur1-score">
-				<span class="joueur1-round"></span>
-				<span class="number"></span>
-			</div>
-			<span data-player="2" class="name">{{joueur2?.name}}</span>
-		</div>
-  
-  <div class="board">
-    <ul id="board">
-      <ng-container *ngFor="let ligne of [0,1,2,3,4,5,6]">
-        <ng-container *ngFor="let colonne of [0,1,2,3,4,5,6]">
-          <li (click)="clickOnTile(ligne,colonne)" [attr.data-ligne]=ligne [attr.data-colonne]=colonne>
+
+<div class="joueur2-points">
+  <span data-player="1" class="name">{{joueur1?.name}}</span>
+  <div class="joueur2-score">
+    <span class="number"></span>
+    <span class="joueur2-round"></span>
+  </div>
+</div>
+<span class="separ-score"></span>
+<div class="joueur1-points">
+  <div class="joueur1-score">
+    <span class="joueur1-round"></span>
+    <span class="number"></span>
+  </div>
+  <span data-player="2" class="name">{{joueur2?.name}}</span>
+</div>
+
+<button (click)="save()" class="btn">Sauvegarder la partie</button>
+<div class="board">
+  <ul id="board">
+    <ng-container *ngFor="let ligne of [0,1,2,3,4,5,6]">
+      <ng-container *ngFor="let colonne of [0,1,2,3,4,5,6]">
+        <li (click)="clickOnTile(ligne,colonne)" [attr.data-ligne]=ligne [attr.data-colonne]=colonne>
             <span class="">
             </span>
-          </li>
-        </ng-container>
+        </li>
       </ng-container>
+    </ng-container>
   </ul>
-  </div>
+</div>
 </body>

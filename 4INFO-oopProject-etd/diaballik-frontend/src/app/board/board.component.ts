@@ -161,4 +161,9 @@ export class BoardComponent implements OnInit {
   addPossibility(ligne: number, colonne: number, joueur: Player, isBall: boolean): void {
     this.getSpan(ligne, colonne).className = `piece choice ${this.getClassCouleurJoueur(joueur)} ${isBall ? 'ball' : ''}`;
   }
+
+  save() {
+    this.requesterBackEnd.save();
+    alert('Partie bien sauvegardée');
+  }
 }
