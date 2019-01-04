@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {IA_level, Player} from '../../model/Player';
 import {Transmetter} from '../../model/Transmetter';
 import {Router} from '@angular/router';
+import {RequesterBackEndService} from '../../service/RequesterBackEnd.service';
 
 @Component({
   selector: 'app-load-game',
@@ -14,7 +15,7 @@ export class LoadGameComponent implements OnInit {
   date: Date;
   IA_level: any;
 
-  constructor(private router: Router) {
+  constructor(private requester: RequesterBackEndService, private router: Router) {
     this.IA_level = IA_level;
     if (Transmetter.data !== undefined) {
 
@@ -31,7 +32,13 @@ export class LoadGameComponent implements OnInit {
   }
 
   loadAGame() {
-
+    let response = this.requester.getGameRegistrered(this.date.getTime().toString());
+    response.then(infos => {
+      Transmetter.data = {
+        'infos': infos
+      };
+      this.router.navigate(['board']);
+    });
   }
 
   replay() {

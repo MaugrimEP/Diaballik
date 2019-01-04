@@ -42,12 +42,16 @@ export class MenuComponent implements OnInit {
   }
 
   startNewGame() {
-    Transmetter.data = {
-      'j1': this.joueur1,
-      'j2': this.joueur2,
-      'scenario': this.scenario
-    };
-    this.router.navigate(['board']);
+    this.requester.initGame(
+      this.joueur1,
+      this.joueur2,
+      this.scenario
+    ).then(infos => {
+      Transmetter.data = {
+        'infos': infos
+      };
+      this.router.navigate(['board']);
+    });
   }
 
   /*testPlay() {

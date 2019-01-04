@@ -1,4 +1,4 @@
-import {Component, OnInit, SkipSelf} from '@angular/core';
+import {AfterContentInit, AfterViewChecked, AfterViewInit, Component, OnInit, SkipSelf} from '@angular/core';
 import {RequesterBackEndService} from '../../service/RequesterBackEnd.service';
 import {Player} from 'src/model/Player';
 import {Board, Pion, TileInfo} from 'src/model/Board';
@@ -13,7 +13,7 @@ import {Observable} from 'rxjs';
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css']
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements AfterViewChecked {
 
   joueur1: Player;
   joueur2: Player;
@@ -25,9 +25,6 @@ export class BoardComponent implements OnInit {
 
   constructor(private requesterBackEnd: RequesterBackEndService, private router: Router) {
 
-  }
-
-  ngOnInit() {
     if (Transmetter.data === undefined) {
       alert('Erreur de chargement');
       this.router.navigate(['menu']);
@@ -35,37 +32,34 @@ export class BoardComponent implements OnInit {
     }
 
     this.board = new Board();
+    const infos = Transmetter.data.infos;
 
-    const reponse = this.requesterBackEnd.initGame(
-      Transmetter.data.j1,
-      Transmetter.data.j2,
-      Transmetter.data.scenario
-    );
+    this.joueur1 = Player.fromJSON(infos.joueur1);
+    this.joueur2 = Player.fromJSON(infos.joueur2);
+    this.etat = Etat.fromJSON(infos.automate.etatCourant);
+  }
 
-    reponse.then((infos: any) => {
-      this.joueur1 = Player.fromJSON(infos.joueur1);
-      this.joueur2 = Player.fromJSON(infos.joueur2);
-      this.etat = Etat.fromJSON(infos.automate.etatCourant);
+  ngAfterViewChecked() {
+    const infos = Transmetter.data.infos;
 
 
-      console.log(infos);
-      for (let ligne = 0; ligne < 7; ++ligne) {
-        for (let colonne = 0; colonne < 7; ++colonne) {
-          let uneCase = infos.plateau.lesCases[`${ligne}:${colonne}`];
-          if (uneCase.balle != null) {
-            let joueurAssociated = uneCase.pion.joueur === 1 ? this.joueur1 : this.joueur2;
-            this.board.addPion(ligne, colonne, Pion.ball, joueurAssociated);
-          }
-          if (uneCase.balle == null && uneCase.pion != null) {
-            let joueurAssociated = uneCase.pion.joueur === 1 ? this.joueur1 : this.joueur2;
-            this.board.addPion(ligne, colonne, Pion.pion, joueurAssociated);
-          }
+    console.log(infos);
+    for (let ligne = 0; ligne < 7; ++ligne) {
+      for (let colonne = 0; colonne < 7; ++colonne) {
+        let uneCase = infos.plateau.lesCases[`${ligne}:${colonne}`];
+        if (uneCase.balle != null) {
+          let joueurAssociated = uneCase.pion.joueur === 1 ? this.joueur1 : this.joueur2;
+          this.board.addPion(ligne, colonne, Pion.ball, joueurAssociated);
+        }
+        if (uneCase.balle == null && uneCase.pion != null) {
+          let joueurAssociated = uneCase.pion.joueur === 1 ? this.joueur1 : this.joueur2;
+          this.board.addPion(ligne, colonne, Pion.pion, joueurAssociated);
         }
       }
+    }
 
-      this.updateTiles();
-      this.setEtat();
-    });
+    this.updateTiles();
+    this.setEtat();
   }
 
   updateTiles(): void {

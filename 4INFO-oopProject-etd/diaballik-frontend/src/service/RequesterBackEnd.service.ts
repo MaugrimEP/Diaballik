@@ -108,8 +108,8 @@ export class RequesterBackEndService {
       this.httpClient
         .get(`/game/${gameId}`)
         .subscribe(
-          (res: string) => {
-            resolve(JSON.parse(res));
+          (res: any) => {
+            resolve(res);
           },
           (error) => {
             reject();
