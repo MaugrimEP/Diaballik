@@ -8,7 +8,7 @@ export class ShortGameInfo {
 
   static from(json: string): ShortGameInfo[] {
     const games: ShortGameInfo[] = [];
-    const parsed = JSON.parse(json);
+    const parsed = json;
     for (const elem of parsed) {
       games.push(new ShortGameInfo(
         Player.fromJSON(elem.joueur1),

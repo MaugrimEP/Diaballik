@@ -20,7 +20,7 @@ const appRoutes: Routes = [
     path: 'board',
     component: BoardComponent,
   }, {
-    path: 'load/:gameid',
+    path: 'load',
     component: LoadGameComponent
   },
   {

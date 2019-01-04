@@ -16,34 +16,20 @@ export class RequesterBackEndService {
 
   getListShortGame(): Promise<ShortGameInfo[]> {
     return new Promise<ShortGameInfo[]>((resolve, reject) => {
-        setTimeout(
-          () => {
-            const json = '[\n' +
-              '  {\n' +
-              '    "type": "SmallerGameManager",\n' +
-              '    "@id": 1,\n' +
-              '    "joueur1": {\n' +
-              '      "type": "JoueurHumain",\n' +
-              '      "@id": 1,\n' +
-              '      "couleur": {\n' +
-              '        "code": "#FF0000"\n' +
-              '      },\n' +
-              '      "pseudo": "ringo"\n' +
-              '    },\n' +
-              '    "joueur2": {\n' +
-              '      "type": "JoueurHumain",\n' +
-              '      "@id": 2,\n' +
-              '      "couleur": {\n' +
-              '        "code": "#000000"\n' +
-              '      },\n' +
-              '      "pseudo": "start"\n' +
-              '    },\n' +
-              '    "date": 1543950017516\n' +
-              '  }\n' +
-              ']';
-            resolve(ShortGameInfo.from(json));
-          }, 2000
-        );
+
+        this.httpClient
+          .get('/game/games')
+          .subscribe(
+            (json: string) => {
+              console.log(json);
+              resolve(ShortGameInfo.from(json));
+            },
+            (error) => {
+              reject();
+            }
+          );
+
+
       }
     );
   }
@@ -65,7 +51,6 @@ export class RequesterBackEndService {
       '    "' + typePartie + '"\n' +
       '  ]\n' +
       '}';
-    console.log(JSON.parse(req));
 
     return new Promise((resolve, reject) => {
       this.httpClient
@@ -107,7 +92,7 @@ export class RequesterBackEndService {
   save() {
     return new Promise(((resolve, reject) => {
       this.httpClient
-        .get('localhost:4444/save')
+        .get('/game/save')
         .subscribe(
           () => {
             resolve();
@@ -122,7 +107,7 @@ export class RequesterBackEndService {
   getGameRegistrered(gameId: string) {
     return new Promise(((resolve, reject) => {
       this.httpClient
-        .get(`localhost:4444/game/${gameId}`)
+        .get(`/game/${gameId}`)
         .subscribe(
           (res: string) => {
             resolve(JSON.parse(res));
@@ -137,7 +122,7 @@ export class RequesterBackEndService {
   deleteGameRegistrered(gameId: string) {
     return new Promise(((resolve, reject) => {
       this.httpClient
-        .delete(`localhost:4444/game/${gameId}`)
+        .delete(`/game/${gameId}`)
         .subscribe(
           (res: string) => {
             resolve(JSON.parse(res));
