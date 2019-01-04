@@ -9,6 +9,7 @@ import {Action} from '../model/Action';
 @Injectable()
 export class RequesterBackEndService {
 
+  static idInit = 0;
 
   constructor(private httpClient: HttpClient) {
   }
@@ -54,10 +55,11 @@ export class RequesterBackEndService {
     }
 
     const req = '{\n' +
+      ' "@id" : ' + (RequesterBackEndService.idInit++) + ',' +
       '  "type": "InitGameClasses",\n' +
       '  "j1": ' + j1.toJSON() + ',' +
       '  "j2":' + j2.toJSON() + ',' +
-      '  "plateau": { "type": "' + plateau + '"},\n' +
+      '  "plateau": { "@id" : 1, "type": "' + plateau + '"},\n' +
       '  "typePartie": [\n' +
       '    "TypePartie",\n' +
       '    "' + typePartie + '"\n' +

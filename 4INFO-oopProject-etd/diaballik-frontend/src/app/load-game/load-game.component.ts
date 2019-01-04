@@ -18,4 +18,11 @@ export class LoadGameComponent implements OnInit {
   ngOnInit() {
   }
 
+  loadAGame() {
+
+  }
+
+  replay() {
+
+  }
 }

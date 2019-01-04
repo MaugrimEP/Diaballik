@@ -3,14 +3,17 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export class Player {
 
+  static idCpt = 0;
 
   constructor(public color: string,
               public name: string,
               public typeIA: boolean = false,
-              public id: number = 0,
+              public id: number = -1,
               public niveau_ia: IA_level = IA_level.Noob
   ) {
-
+    if (this.id === -1) {
+      this.id = Player.idCpt++;
+    }
   }
 
   public toString(): string {
@@ -33,7 +36,8 @@ export class Player {
 
 
     return `{
-        "type" : "${this.typeIA ? 'IA' : 'joueurHumain'}",
+        "@id" : ${this.id},
+        "type" : "${this.typeIA ? 'IA' : 'JoueurHumain'}",
         "couleur" : {
             "code" : "${this.color}"
           },
