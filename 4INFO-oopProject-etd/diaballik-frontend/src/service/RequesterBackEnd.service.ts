@@ -20,8 +20,7 @@ export class RequesterBackEndService {
         this.httpClient
           .get('/game/games')
           .subscribe(
-            (json: string) => {
-              console.log(json);
+            (json: any) => {
               resolve(ShortGameInfo.from(json));
             },
             (error) => {

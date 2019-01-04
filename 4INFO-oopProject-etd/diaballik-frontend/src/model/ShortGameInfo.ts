@@ -6,7 +6,7 @@ export class ShortGameInfo {
   constructor(public joueur1: Player, public joueur2: Player, public date: Date) {
   }
 
-  static from(json: string): ShortGameInfo[] {
+  static from(json: any): ShortGameInfo[] {
     const games: ShortGameInfo[] = [];
     const parsed = json;
     for (const elem of parsed) {

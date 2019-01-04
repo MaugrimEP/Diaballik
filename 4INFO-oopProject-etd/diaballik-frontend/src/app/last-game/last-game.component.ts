@@ -14,7 +14,7 @@ export class LastGameComponent implements OnInit {
 
   lastGames: Promise<ShortGameInfo[]>;
 
-  constructor(requesterBackEnd: RequesterBackEndService, private router: Router) {
+  constructor(private requesterBackEnd: RequesterBackEndService, private router: Router) {
 
     this.lastGames = requesterBackEnd.getListShortGame();
   }
@@ -29,5 +29,10 @@ export class LastGameComponent implements OnInit {
       'j2': joueur2
     };
     this.router.navigate(['load']);
+  }
+
+  deleteThisId(time: number) {
+    this.requesterBackEnd.deleteGameRegistrered(time.toString());
+    this.router.navigate(['menu']);
   }
 }
