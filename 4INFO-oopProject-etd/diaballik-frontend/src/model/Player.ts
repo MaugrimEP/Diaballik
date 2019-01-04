@@ -59,7 +59,7 @@ export class Player {
 }
 
 export enum IA_level {
-  Noob = 'noob',
-  Starting = 'starting',
-  Progressive = 'progressive',
+  Noob = 'StrNoob',
+  Starting = 'StrStarting',
+  Progressive = 'StrProgressive',
 }

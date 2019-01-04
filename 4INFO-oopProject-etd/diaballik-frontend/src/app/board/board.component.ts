@@ -4,6 +4,7 @@ import {Player} from 'src/model/Player';
 import {Board, Pion, TileInfo} from 'src/model/Board';
 import {PlateauType} from 'src/model/PlateauType';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Transmetter} from '../../model/Transmetter';
 
 @Component({
   selector: 'app-board',
@@ -19,17 +20,22 @@ export class BoardComponent implements OnInit {
   selectedLigne: number;
   selectedColonne: number;
 
-  constructor(private requesterBackEnd: RequesterBackEndService, private route: ActivatedRoute) {
+  constructor(private requesterBackEnd: RequesterBackEndService, private router: Router) {
 
   }
 
   ngOnInit() {
     this.board = new Board();
 
+    if (Transmetter.data === undefined) {
+      alert('Erreur de chargement');
+      this.router.navigate(['menu']);
+      return;
+    }
     const reponse = this.requesterBackEnd.initGame(
-      new Player('#FFF', 'Bob'),
-      new Player('#000', 'Jean'),
-      PlateauType.Standard,
+      Transmetter.data.j1,
+      Transmetter.data.j2,
+      Transmetter.data.scenario
     );
 
     const boardThis = this;
@@ -53,7 +59,6 @@ export class BoardComponent implements OnInit {
       }
 
       boardThis.updateTiles();
-      console.log('loading Fini');
     });
   }
 
@@ -67,7 +72,6 @@ export class BoardComponent implements OnInit {
   }
 
   getLi(ligne: number, colonne: number) {
-    console.log('ligne ' + ligne + 'colonne ' + colonne);
     return document.querySelector(`li[data-ligne="${ligne}"][data-colonne="${colonne}"]`);
   }
 

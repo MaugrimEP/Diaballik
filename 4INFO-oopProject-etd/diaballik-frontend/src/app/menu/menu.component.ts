@@ -6,6 +6,7 @@ import {PlateauType} from '../../model/PlateauType';
 import {RequesterBackEndService} from '../../service/RequesterBackEnd.service';
 import {Router} from '@angular/router';
 import {Action} from '../../model/Action';
+import {Transmetter} from '../../model/Transmetter';
 
 @Component({
   selector: 'app-menu',
@@ -41,6 +42,11 @@ export class MenuComponent implements OnInit {
   }
 
   startNewGame() {
+    Transmetter.data = {
+      'j1': this.joueur1,
+      'j2': this.joueur2,
+      'scenario': this.scenario
+    };
     this.router.navigate(['board']);
   }
 
