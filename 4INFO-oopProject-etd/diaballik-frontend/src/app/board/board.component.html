@@ -1,4 +1,5 @@
 <body>
+<button (click)="menu()" class="btn">Retourner au menu</button>
 
 <div class="joueur2-points">
   <span data-player="1" class="name">{{joueur1?.name}}</span>
@@ -16,7 +17,10 @@
   <span data-player="2" class="name">{{joueur2?.name}}</span>
 </div>
 
+
 <button (click)="save()" class="btn">Sauvegarder la partie</button>
+
+<span id="tour" class="panel"></span>
 <div class="board">
   <ul id="board">
     <ng-container *ngFor="let ligne of [0,1,2,3,4,5,6]">

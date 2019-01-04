@@ -5,6 +5,8 @@ import {Board, Pion, TileInfo} from 'src/model/Board';
 import {PlateauType} from 'src/model/PlateauType';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Transmetter} from '../../model/Transmetter';
+import {Etat} from '../../model/Etat';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-board',
@@ -19,31 +21,34 @@ export class BoardComponent implements OnInit {
 
   selectedLigne: number;
   selectedColonne: number;
+  etat: Etat;
 
   constructor(private requesterBackEnd: RequesterBackEndService, private router: Router) {
 
   }
 
   ngOnInit() {
-    this.board = new Board();
-
     if (Transmetter.data === undefined) {
       alert('Erreur de chargement');
       this.router.navigate(['menu']);
       return;
     }
+
+    this.board = new Board();
+
     const reponse = this.requesterBackEnd.initGame(
       Transmetter.data.j1,
       Transmetter.data.j2,
       Transmetter.data.scenario
     );
 
-    const boardThis = this;
-
     reponse.then((infos: any) => {
       this.joueur1 = Player.fromJSON(infos.joueur1);
       this.joueur2 = Player.fromJSON(infos.joueur2);
+      this.etat = Etat.fromJSON(infos.automate.etatCourant);
 
+
+      console.log(infos);
       for (let ligne = 0; ligne < 7; ++ligne) {
         for (let colonne = 0; colonne < 7; ++colonne) {
           let uneCase = infos.plateau.lesCases[`${ligne}:${colonne}`];
@@ -58,7 +63,8 @@ export class BoardComponent implements OnInit {
         }
       }
 
-      boardThis.updateTiles();
+      this.updateTiles();
+      this.setEtat();
     });
   }
 
@@ -165,5 +171,15 @@ export class BoardComponent implements OnInit {
   save() {
     this.requesterBackEnd.save();
     alert('Partie bien sauvegardée');
+  }
+
+  menu() {
+    this.router.navigate(['menu']);
+  }
+
+
+  private setEtat() {
+    document.querySelector(`#tour`).textContent = `Tour de ${this.etat.joueurCourant}, ${this.etat.nbCoupRestant} coups restants`;
+
   }
 }
