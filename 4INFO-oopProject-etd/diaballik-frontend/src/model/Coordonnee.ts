@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 
 export class Coordonnee {
-  private _ligne: number;
-  private _colonne: number;
+  public _ligne: number;
+  public _colonne: number;
 
 
   constructor(ligne: number, colonne: number) {

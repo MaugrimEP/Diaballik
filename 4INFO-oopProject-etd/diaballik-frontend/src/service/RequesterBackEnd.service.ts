@@ -16,7 +16,6 @@ export class RequesterBackEndService {
 
   getListShortGame(): Promise<ShortGameInfo[]> {
     return new Promise<ShortGameInfo[]>((resolve, reject) => {
-
         this.httpClient
           .get('/game/games')
           .subscribe(
@@ -27,8 +26,6 @@ export class RequesterBackEndService {
               reject();
             }
           );
-
-
       }
     );
   }
@@ -64,9 +61,22 @@ export class RequesterBackEndService {
         );
     });
   }
-
+  
   play(action: Action): Promise<ResultOfAPlay> {
-    const req = '{\n' +
+    let req = 
+    `
+    {
+      arrivee : {
+        ${action._arrivee._ligne},
+        ${action._arrivee._colonne},
+      },
+      depart : {
+        ${action._depart._ligne},
+        ${action._depart._colonne},
+      }
+    }
+    `;
+    req = '{\n' +
       '  "type": "Action",\n' +
       '  "depart": {\n' +
       '    "type": "Coordonnee",\n' +
@@ -87,6 +97,7 @@ export class RequesterBackEndService {
     );
 
   }
+
 
   save() {
     return new Promise(((resolve, reject) => {

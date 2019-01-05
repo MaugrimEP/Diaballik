@@ -18,6 +18,10 @@ export class Board {
     return this.tiles[ligne][colonne];
   }
 
+  set(ligne: number, colonne: number, tileInfo:TileInfo): void {
+    this.tiles[ligne][colonne] = tileInfo;
+  }
+
   addPion(ligne: number, colonne: number, pion: Pion, player: Player): void {
     this.get(ligne, colonne).pion = pion;
     this.get(ligne, colonne).player = player;

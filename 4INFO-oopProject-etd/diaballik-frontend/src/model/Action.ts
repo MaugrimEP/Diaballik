@@ -1,9 +1,8 @@
 import {Coordonnee} from './Coordonnee';
 
 export class Action {
-  private _depart: Coordonnee;
-  private _arrivee: Coordonnee;
-
+  public _depart: Coordonnee;
+  public _arrivee: Coordonnee;
 
   constructor(depart: Coordonnee, arrivee: Coordonnee) {
     this._depart = depart;

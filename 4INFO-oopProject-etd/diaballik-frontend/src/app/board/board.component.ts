@@ -7,6 +7,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Transmetter} from '../../model/Transmetter';
 import {Etat} from '../../model/Etat';
 import {Observable} from 'rxjs';
+import { Coordonnee } from 'src/model/Coordonnee';
+import { Action } from 'src/model/Action';
+import { ResultOfAPlay } from 'src/model/ResultOfAPlay';
 
 @Component({
   selector: 'app-board',
@@ -22,6 +25,49 @@ export class BoardComponent implements AfterViewChecked {
   selectedLigne: number;
   selectedColonne: number;
   etat: Etat;
+
+  charged: boolean = false;
+
+  setPion(ligne:number, colonne:number){
+
+  }
+
+  getJoueurCourrant():Player{
+    if(this.etat.joueurCourant==this.joueur1.name){
+      return this.joueur1;
+    }
+    return this.joueur2;
+  }
+
+  movePiece(action:Action):void{
+    let tileInfoDepart = this.board.get(action._depart._ligne,action._depart._colonne);
+    let tileInfoArrive = this.board.get(action._arrivee._ligne,action._arrivee._colonne);
+
+    if(this.board.isBall(action._depart._ligne, action._depart._colonne)){//isBall
+      this.board.addPion(action._arrivee._ligne,action._arrivee._colonne,Pion.ball,tileInfoDepart.player);
+      this.board.addPion(action._depart._ligne,action._depart._colonne,Pion.pion,tileInfoDepart.player);
+    }else{//isPion
+      this.board.set(action._arrivee._ligne,action._arrivee._colonne,tileInfoDepart);
+      this.board.set(action._depart._ligne,action._depart._colonne,tileInfoArrive);
+    }
+  }
+
+  tryToPlay(ligneD:number, colonneD:number, ligneA:number, colonneA:number){
+    let depart = new Coordonnee(ligneD, colonneD);
+    let arrive = new Coordonnee(ligneA, colonneA);
+
+    let action = new Action(depart, arrive); 
+
+    let resultOfAPlayHARDCODE = new ResultOfAPlay([action],false,0);
+
+    this.requesterBackEnd.play(action).then(resultOfAPlay=>{
+      let listeActions = resultOfAPlayHARDCODE.actions;
+      for(let action of listeActions){
+        this.movePiece(action);
+      }
+      this.updateTiles();
+    });
+  }
 
   constructor(private requesterBackEnd: RequesterBackEndService, private router: Router) {
 
@@ -40,10 +86,9 @@ export class BoardComponent implements AfterViewChecked {
   }
 
   ngAfterViewChecked() {
+    if(this.charged)
+      return;
     const infos = Transmetter.data.infos;
-
-
-    console.log(infos);
     for (let ligne = 0; ligne < 7; ++ligne) {
       for (let colonne = 0; colonne < 7; ++colonne) {
         let uneCase = infos.plateau.lesCases[`${ligne}:${colonne}`];
@@ -60,12 +105,14 @@ export class BoardComponent implements AfterViewChecked {
 
     this.updateTiles();
     this.setEtat();
+
+    this.charged = true;
   }
 
   updateTiles(): void {
     for (let ligne = 0; ligne < 7; ++ligne) {
       for (let colonne = 0; colonne < 7; ++colonne) {
-        const tile = this.board.get(ligne, colonne);
+        let tile = this.board.get(ligne, colonne);
         this.getSpan(ligne, colonne).className = this.getClassTile(ligne, colonne);
       }
     }
@@ -97,11 +144,14 @@ export class BoardComponent implements AfterViewChecked {
     return player === this.joueur1 ? 'pieceJoueur1' : 'pieceJoueur2';
   }
 
+  
+
   clickOnTile(ligne: number, colonne: number): void {
-    console.log('click on tile');
     const clickedSpan = this.getSpan(ligne, colonne);
-    if (clickedSpan.classList.contains('choice')) { // dans ce cas on est sur un des mouvements possible et dans ce cas on envoit au serveur
-      console.log('coupe joué');
+    if (clickedSpan.classList.contains('choice')||
+      this.somethingSelected() && this.board.isBall(this.selectedLigne, this.selectedColonne)) { // dans ce cas on est sur un des mouvements possible et dans ce cas on envoit au serveur
+      this.tryToPlay(this.selectedLigne, this.selectedColonne, ligne, colonne);
+      console.log('coupe tenté');
       return;
     }
     if (this.board.isEmpty(ligne, colonne)) {// l'utilisateur a cliqué sur une case vide dans ce cas on clear la liste des possibilitées
@@ -116,8 +166,12 @@ export class BoardComponent implements AfterViewChecked {
     }
   }
 
+  somethingSelected():boolean{
+    return this.selectedLigne != null && this.selectedColonne != null;
+  }
+  
   select(ligne: number, colonne: number) {
-    if (this.selectedLigne != null && this.selectedColonne != null) {
+    if (this.somethingSelected()) {
       this.deselect(this.selectedLigne, this.selectedColonne);
       this.clearPossibilty();
       this.selectedLigne = null;
