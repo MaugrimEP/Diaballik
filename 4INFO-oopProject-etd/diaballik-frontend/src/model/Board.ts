@@ -49,7 +49,7 @@ export class Board {
     for (let addLigne = -1; addLigne <= 1; ++addLigne) {
       for (let addColonne = -1; addColonne <= 1; ++addColonne) {
         try {
-          if (this.get(ligne + addLigne, colonne + addColonne).isEmpty())
+          if (this.get(ligne + addLigne, colonne + addColonne).isEmpty() && Math.abs(addLigne) + Math.abs(addColonne)<=1)
             possibilitys.push({ligne: ligne + addLigne, colonne: colonne + addColonne});
         } catch (e) {
         }
