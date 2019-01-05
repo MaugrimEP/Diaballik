@@ -4,10 +4,13 @@ export class Coordonnee {
   public _ligne: number;
   public _colonne: number;
 
+  static cptId = 0;
+  public id: number;
 
   constructor(ligne: number, colonne: number) {
     this._ligne = ligne;
     this._colonne = colonne;
+    this.id = Coordonnee.cptId++;
   }
 
 

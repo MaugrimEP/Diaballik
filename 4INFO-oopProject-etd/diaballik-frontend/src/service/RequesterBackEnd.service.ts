@@ -61,40 +61,42 @@ export class RequesterBackEndService {
         );
     });
   }
-  
+
   play(action: Action): Promise<ResultOfAPlay> {
-    let req = 
-    `
-    {
-      arrivee : {
-        ${action._arrivee._ligne},
-        ${action._arrivee._colonne},
-      },
-      depart : {
-        ${action._depart._ligne},
-        ${action._depart._colonne},
-      }
-    }
-    `;
-    req = '{\n' +
+    let req = '{\n' +
+      `   "@id" : ${action.id},` +
       '  "type": "Action",\n' +
       '  "depart": {\n' +
+      `   "@id" : ${action.depart.id},` +
       '    "type": "Coordonnee",\n' +
       `   "ligne": ${action.depart.ligne},\n` +
       `    "colonne": ${action.depart.colonne}\n` +
       '  },\n' +
       '  "arrivee": {\n' +
+      `   "@id" : ${action.arrivee.id},` +
       '    "type": "Coordonnee",\n' +
-      `    "ligne": ${action.arrivee.ligne},\n'` +
+      `    "ligne": ${action.arrivee.ligne},\n` +
       `    "colonne": ${action.arrivee.colonne}\n` +
       '  },\n' +
       '  "plateau": null\n' + // TODO test si on delete
       '}';
-
+    console.log(JSON.parse(req));
     return new Promise((resolve, reject) => {
+      this.httpClient
+        .put('/game/play', JSON.parse(req))
+        .subscribe(
+          (response: any) => {
+            resolve(ResultOfAPlay.fromJSON(response));
+          },
+          (error) => { // for test, TODO delete à la fin
+            // resolve(RequesterBackEndService.getHardCodeRepInit());
+          }
+        );
+    });
+    /*return new Promise((resolve, reject) => {
         resolve(ResultOfAPlay.fromJSON(JSON.parse(RequesterBackEndService.getHardCodeRepPlay())));
       }
-    );
+    );*/
 
   }
 
