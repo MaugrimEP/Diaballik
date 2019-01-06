@@ -1,6 +1,5 @@
 package diaballik.model.game;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -20,7 +19,7 @@ public enum TypePartie {
     @JsonIgnore
     private transient EtatTour etatInitial;
 
-    @JsonCreator
+
     TypePartie() {
 
     }

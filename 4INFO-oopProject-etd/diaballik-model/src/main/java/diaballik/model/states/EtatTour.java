@@ -25,7 +25,7 @@ import java.util.Objects;
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class EtatTour {
-    private static int NB_COUP_INIT = 3;
+    private static final int NB_COUP_INIT = 3;
 
     private int nbCoupRestant;
 
@@ -35,7 +35,11 @@ public abstract class EtatTour {
 
     @JsonCreator
     protected EtatTour(@JsonProperty("nbCoupRestant") final int nbCoup) {
-        this.nbCoupRestant = nbCoup;
+        if (nbCoup == 0) {
+            this.nbCoupRestant = NB_COUP_INIT;
+        } else {
+            this.nbCoupRestant = nbCoup;
+        }
     }
 
     public int jouer(final AutomateGameManager automate) {

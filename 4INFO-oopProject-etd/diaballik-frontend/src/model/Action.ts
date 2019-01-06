@@ -7,6 +7,8 @@ export class Action {
 
   static cptId = 100;
 
+  static allCoordinates = {};
+
   constructor(depart: Coordonnee, arrivee: Coordonnee) {
     this._depart = depart;
     this._arrivee = arrivee;
@@ -31,6 +33,21 @@ export class Action {
   }
 
   static fromJSON(action: any): Action {
-    return new Action(Coordonnee.fromJSON(action.depart), Coordonnee.fromJSON(action.arrivee));
+    let dep;
+    let arr;
+    if (action.depart.ligne !== undefined) {
+      dep = Coordonnee.fromJSON(action.depart);
+      this.allCoordinates[action.depart['@id']] = dep;
+    } else {
+      dep = this.allCoordinates[action.depart];
+    }
+
+    if (action.arrivee.ligne !== undefined) {
+      arr = Coordonnee.fromJSON(action.arrivee);
+      this.allCoordinates[action.arrivee['@id']] = arr;
+    } else {
+      arr = this.allCoordinates[action.arrivee];
+    }
+    return new Action(dep, arr);
   }
 }

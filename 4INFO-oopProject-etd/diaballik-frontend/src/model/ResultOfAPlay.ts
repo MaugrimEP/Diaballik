@@ -13,9 +13,20 @@ export class ResultOfAPlay {
   }
 
   static fromJSON(result): ResultOfAPlay {
-    let actions: Action[] = [];
-    for (let action of result.actions) {
-      actions.push(Action.fromJSON(action));
+    const actions: Action[] = [];
+    const mapIdAction = {};
+    for (const action of result.actions) {
+      if (action.depart !== undefined) {
+
+        const actionObj = Action.fromJSON(action);
+
+        actions.push(actionObj);
+        mapIdAction[action['@id']] = actionObj;
+
+      } else {
+        actions.push(mapIdAction[action['@id']]);
+      }
+
     }
     return new ResultOfAPlay(actions, result.gameWon, result.winner);
   }
