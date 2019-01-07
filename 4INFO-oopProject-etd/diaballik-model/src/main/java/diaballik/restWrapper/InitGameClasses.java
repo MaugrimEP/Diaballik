@@ -1,10 +1,8 @@
 package diaballik.restWrapper;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import diaballik.model.game.TypePartie;
 import diaballik.model.joueur.Joueur;
 import diaballik.model.plateau.Plateau;
@@ -14,7 +12,7 @@ import java.util.Objects;
 // We want to add a JSON attribute to know the type of the object.
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 // We add a unique identifier to the Json object
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class InitGameClasses {
     private final Joueur j1;
     private final Joueur j2;

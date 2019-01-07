@@ -37,7 +37,7 @@ export class RequesterBackEndService {
     }
 
     const req = '{\n' +
-      ' "@id" : ' + (RequesterBackEndService.idInit++) + ',' +
+      //' "@id" : ' + (RequesterBackEndService.idInit++) + ',' +
       '  "type": "InitGameClasses",\n' +
       '  "j1": ' + j1.toJSON() + ',' +
       '  "j2":' + j2.toJSON() + ',' +
