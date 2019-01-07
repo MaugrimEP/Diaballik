@@ -24,6 +24,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,6 +56,11 @@ public class RestController {
         if (Joueur.checkPlayerConsistency(j1, j2)) {
             final Plateau plateau = initGameClasses.getPlateau();
             final TypePartie typePartie = initGameClasses.getTypePartie();
+            try {
+                typePartie.setEtatInitial(typePartie.getEtatInitial().getClass().getDeclaredConstructor().newInstance());//to fix a "bug" with enums
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
             setGameManager(new GameManagerBuilder().joueur1(j1).joueur2(j2).plateau(plateau).typePartie(typePartie).build());
             return gm;
         } else {
