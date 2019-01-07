@@ -66,10 +66,19 @@ export class BoardComponent implements AfterViewChecked {
         alert('Coup impossible !');
         return;
       }
+
+
       for (let action of listeActions) {
         this.movePiece(action);
+        this.updateAutomate();
       }
+
+
       this.updateTiles();
+      if (resultOfAPlay.gameWon) {
+        alert('Gagné par ' + resultOfAPlay.winner + ' !');
+        return;
+      }
     });
   }
 
@@ -232,5 +241,17 @@ export class BoardComponent implements AfterViewChecked {
   private setEtat() {
     document.querySelector(`#tour`).textContent = `Tour de ${this.etat.joueurCourant}, ${this.etat.nbCoupRestant} coups restants`;
 
+  }
+
+  private updateAutomate() {
+    if (--this.etat.nbCoupRestant === 0) {
+      if (this.etat.joueurCourant === 'J1') {
+        this.etat.joueurCourant = 'J2';
+      } else {
+        this.etat.joueurCourant = 'J1';
+      }
+      this.etat.nbCoupRestant = 3;
+    }
+    this.setEtat();
   }
 }
