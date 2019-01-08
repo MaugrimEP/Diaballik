@@ -280,7 +280,7 @@ public abstract class Plateau {
     }
 
     private boolean hasJ2Won(final Joueur j2) {
-        final List<Coordonnee> ligneBas = getLigneCoordonnee(Plateau.SIZE - 1, Plateau.SIZE);//j1 est en bas
+        final List<Coordonnee> ligneBas = getLigneCoordonnee(Plateau.SIZE - 1, Plateau.SIZE); //j1 est en bas
         return ligneBas.stream().anyMatch((c) -> lesCases.get(c).hasBall() && lesCases.get(c).getBalle().getJoueur().equals(j2));
     }
 

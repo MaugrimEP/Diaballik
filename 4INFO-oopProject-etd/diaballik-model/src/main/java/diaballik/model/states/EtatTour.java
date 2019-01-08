@@ -62,6 +62,9 @@ public abstract class EtatTour {
         return nbCoupRestant == 0;
     }
 
+    public void setNbCoupRestant(final int nbCoupRestant) {
+        this.nbCoupRestant = nbCoupRestant;
+    }
 
     @Override
     public boolean equals(final Object o) {

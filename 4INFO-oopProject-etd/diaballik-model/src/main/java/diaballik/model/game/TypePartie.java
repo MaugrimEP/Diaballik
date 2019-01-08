@@ -28,9 +28,6 @@ public enum TypePartie {
         this.etatInitial = etatInitial;
     }
 
-    public void setEtatInitial(final EtatTour etatInitial) {
-        this.etatInitial = etatInitial;
-    }
 
     @JsonIgnore
     public EtatTour getEtatInitial() {
