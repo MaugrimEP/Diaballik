@@ -11,6 +11,7 @@ import {Coordonnee} from 'src/model/Coordonnee';
 import {Action} from 'src/model/Action';
 import {ResultOfAPlay} from 'src/model/ResultOfAPlay';
 import { unescapeIdentifier } from '@angular/compiler';
+import { listener } from '@angular/core/src/render3/instructions';
 
 @Component({
   selector: 'app-board',
@@ -55,19 +56,26 @@ export class BoardComponent implements AfterViewChecked {
         return;
       }
 
+      this.delayedActions(listeActions);
 
-      for (let action of listeActions) {
-        this.board.doAction(action);
-        this.updateAutomate();
-      }
-
-
-      this.updateTiles();
       if (resultOfAPlay.gameWon) {
         alert('Gagné par ' + resultOfAPlay.winner + ' !');
         return;
       }
     });
+  }
+
+  delayedActions(listActions : Action[]){
+    let me = this;
+    if(listActions.length == 0)
+      return;
+
+    me.board.doAction(listActions.shift());
+    me.updateAutomate();
+    this.updateTiles();
+    setTimeout(function(){
+      me.delayedActions(listActions);
+  }, 500);
   }
 
   constructor(private requesterBackEnd: RequesterBackEndService, private router: Router) {
@@ -151,18 +159,15 @@ export class BoardComponent implements AfterViewChecked {
     if (clickedSpan.classList.contains('choice') ||
       this.somethingSelected() && this.board.isBall(this.selectedLigne, this.selectedColonne) && this.board.isPion(ligne, colonne) ) { // dans ce cas on est sur un des mouvements possible et dans ce cas on envoit au serveur
       this.tryToPlay(this.selectedLigne, this.selectedColonne, ligne, colonne);
-      console.log('coupe tenté');
       return;
     }
     if (this.board.isEmpty(ligne, colonne)) {// l'utilisateur a cliqué sur une case vide dans ce cas on clear la liste des possibilitées
-      console.log('clear possibilitées');
       this.clearPossibilty();
       this.deselect(this.selectedLigne,this.selectedColonne);
       this.selectedLigne = null;this.selectedColonne = null;
       return;
     }
     if (!this.board.isEmpty(ligne, colonne)) { // il faudra sélectioner la piece actuelle
-      console.log('selected');
       this.select(ligne, colonne);
       return;
     }
