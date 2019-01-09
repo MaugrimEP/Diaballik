@@ -1,9 +1,7 @@
 package diaballik.model.joueur;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import diaballik.model.commande.Action;
 import diaballik.model.coordonnee.Coordonnee;
 import diaballik.model.plateau.Case;
@@ -22,7 +20,7 @@ import java.util.stream.Collectors;
         @JsonSubTypes.Type(value = StrNoob.class),
 })
 // We add a unique identifier to the Json object
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public abstract class StrategieIA {
     /**
      * precondition : il y a forcement un coup a jouer

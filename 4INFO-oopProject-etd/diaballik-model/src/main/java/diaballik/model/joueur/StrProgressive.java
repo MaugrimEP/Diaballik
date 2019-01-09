@@ -13,15 +13,20 @@ public class StrProgressive extends StrategieIA {
     private static int NB_TOUR_AVANT_CHANGEMENT = 5;
 
     @JsonCreator
-    public StrProgressive(@JsonProperty("nbTourJoue") final int nbTourJoue, @JsonProperty("currentStrategie") final StrategieIA currentStrategie) {
-        this.nbTourJoue = nbTourJoue;
-        this.currentStrategie = currentStrategie;
-    }
-
-    @JsonCreator
     public StrProgressive() {
         currentStrategie = new StrNoob();
     }
+
+    @JsonCreator
+    public StrProgressive(@JsonProperty("nbTourJoue") final int nbTourJoue, @JsonProperty("currentStrategie") final StrategieIA currentStrategie) {
+        this.nbTourJoue = nbTourJoue;
+        if (currentStrategie != null) {
+            this.currentStrategie = currentStrategie;
+        } else {
+            this.currentStrategie = new StrNoob();
+        }
+    }
+
 
     @Override
     public Action reflechir(final Joueur joueur) {
