@@ -89,6 +89,15 @@ export class ReplayBoardComponent implements AfterViewChecked {
       for (let colonne = 0; colonne < 7; ++colonne) {
         let tile = this.board.get(ligne, colonne);
         this.getSpan(ligne, colonne).className = this.getClassTile(ligne, colonne);
+        if(this.board.isEmpty(ligne, colonne)){
+          this.getSpan(ligne, colonne).style.backgroundColor = "";
+        }else{
+          this.getSpan(ligne, colonne).style.backgroundColor = this.board.get(ligne, colonne).player.color;
+        }
+        let jeton1 = document.getElementsByClassName("joueur1-round") as HTMLCollectionOf<HTMLElement>;
+        jeton1[0].style.backgroundColor = this.joueur1.color;
+        let jeton2 = document.getElementsByClassName("joueur2-round") as HTMLCollectionOf<HTMLElement>;
+        jeton2[0].style.backgroundColor = this.joueur2.color;
       }
     }
   }
