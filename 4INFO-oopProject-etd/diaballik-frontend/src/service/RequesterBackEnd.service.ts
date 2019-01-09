@@ -80,7 +80,6 @@ export class RequesterBackEndService {
       '  },\n' +
       '  "plateau": null\n' + // TODO test si on delete
       '}';
-    console.log(JSON.parse(req));
     return new Promise((resolve, reject) => {
       this.httpClient
         .put('/game/play', JSON.parse(req))
