@@ -19,11 +19,14 @@ export class ReplayBoardComponent implements AfterViewChecked {
   joueur2: Player;
   board: Board;
 
-  selectedLigne: number;
-  selectedColonne: number;
+  actions = [];
+  indexCurrentAction : number;
+  
   etat: Etat;
 
   charged: boolean = false;
+
+
 
   setPion(ligne: number, colonne: number) {
 
@@ -34,34 +37,6 @@ export class ReplayBoardComponent implements AfterViewChecked {
       return this.joueur1;
     }
     return this.joueur2;
-  }
-
-  tryToPlay(ligneD: number, colonneD: number, ligneA: number, colonneA: number) {
-    let depart = new Coordonnee(ligneD, colonneD);
-    let arrive = new Coordonnee(ligneA, colonneA);
-
-    let action = new Action(depart, arrive);
-
-    // let resultOfAPlayHARDCODE = new ResultOfAPlay([action], false, 0);
-
-    this.requesterBackEnd.play(action).then(resultOfAPlay => {
-      let listeActions = resultOfAPlay.actions;
-      if (listeActions.length === 0) {
-        alert('Coup impossible !');
-        return;
-      }
-
-      for (let action of listeActions) {
-        this.board.doAction(action);
-        this.updateAutomate();
-      }
-
-      this.updateTiles();
-      if (resultOfAPlay.gameWon) {
-        alert('Gagné par ' + resultOfAPlay.winner + ' !');
-        return;
-      }
-    });
   }
 
   constructor(private requesterBackEnd: RequesterBackEndService, private router: Router) {
@@ -78,6 +53,12 @@ export class ReplayBoardComponent implements AfterViewChecked {
     this.joueur1 = Player.fromJSON(infos.joueur1);
     this.joueur2 = Player.fromJSON(infos.joueur2);
     this.etat = Etat.fromJSON(infos.automate.etatCourant);
+    
+    this.actions = [];
+    for(let commande of infos.commandes){
+      this.actions.push(Action.fromJSON(commande.action));
+    }
+    this.indexCurrentAction = this.actions.length-1;
   }
 
   ngAfterViewChecked() {
@@ -99,7 +80,6 @@ export class ReplayBoardComponent implements AfterViewChecked {
     }
 
     this.updateTiles();
-    this.setEtat();
 
     this.charged = true;
   }
@@ -140,100 +120,22 @@ export class ReplayBoardComponent implements AfterViewChecked {
   }
 
 
-  clickOnTile(ligne: number, colonne: number): void {
-    const clickedSpan = this.getSpan(ligne, colonne);
-    if (clickedSpan.classList.contains('choice') ||
-      this.somethingSelected() && this.board.isBall(this.selectedLigne, this.selectedColonne)) { // dans ce cas on est sur un des mouvements possible et dans ce cas on envoit au serveur
-      this.tryToPlay(this.selectedLigne, this.selectedColonne, ligne, colonne);
-      console.log('coupe tenté');
-      return;
-    }
-    if (this.board.isEmpty(ligne, colonne)) {// l'utilisateur a cliqué sur une case vide dans ce cas on clear la liste des possibilitées
-      console.log('clear possibilitées');
-      this.clearPossibilty();
-      return;
-    }
-    if (!this.board.isEmpty(ligne, colonne)) { // il faudra sélectioner la piece actuelle
-      console.log('selected');
-      this.select(ligne, colonne);
-      return;
+
+  actionSuivante() {
+    if(this.indexCurrentAction<this.actions.length-1){
+      this.board.doAction(this.actions[++this.indexCurrentAction]);
+      this.updateTiles();
     }
   }
 
-  somethingSelected(): boolean {
-    return this.selectedLigne != null && this.selectedColonne != null;
-  }
-
-  select(ligne: number, colonne: number) {
-    if (this.somethingSelected()) {
-      this.deselect(this.selectedLigne, this.selectedColonne);
-      this.clearPossibilty();
-      this.selectedLigne = null;
-      this.selectedColonne = null;
+  actionPrecedente() {
+    if(this.indexCurrentAction>=0){
+      this.board.undoAction(this.actions[this.indexCurrentAction--]);
+      this.updateTiles();
     }
-    {
-      this.getSpan(ligne, colonne).classList.add('selected');
-      this.selectedLigne = ligne;
-      this.selectedColonne = colonne;
-
-      let possibiltys = [];
-      if (this.board.isPion(ligne, colonne)) {
-        possibiltys = this.board.getPionPossibility(ligne, colonne);
-      }
-      if (this.board.isBall(ligne, colonne)) {
-        possibiltys = this.board.getBallPossiblity(ligne, colonne);
-      }
-      for (let i = 0; i < possibiltys.length; ++i) {
-        this.addPossibility(possibiltys[i].ligne,
-          possibiltys[i].colonne,
-          this.board.get(ligne, colonne).player,
-          false);
-      }
-    }
-  }
-
-  deselect(ligne: number, colonne: number) {
-    this.getSpan(ligne, colonne).classList.remove('selected');
-  }
-
-  clearPossibilty() {
-    for (let ligne = 0; ligne < 7; ++ligne) {
-      for (let colonne = 0; colonne < 7; ++colonne) {
-        if (this.board.isEmpty(ligne, colonne)) {
-          this.getSpan(ligne, colonne).className = '';
-        }
-      }
-    }
-  }
-
-  addPossibility(ligne: number, colonne: number, joueur: Player, isBall: boolean): void {
-    this.getSpan(ligne, colonne).className = `piece choice ${this.getClassCouleurJoueur(joueur)} ${isBall ? 'ball' : ''}`;
-  }
-
-  save() {
-    this.requesterBackEnd.save();
-    alert('Partie bien sauvegardée');
   }
 
   menu() {
     this.router.navigate(['menu']);
-  }
-
-
-  private setEtat() {
-    document.querySelector(`#tour`).textContent = `Tour de ${this.etat.joueurCourant}, ${this.etat.nbCoupRestant} coups restants`;
-
-  }
-
-  private updateAutomate() {
-    if (--this.etat.nbCoupRestant === 0) {
-      if (this.etat.joueurCourant === 'J1') {
-        this.etat.joueurCourant = 'J2';
-      } else {
-        this.etat.joueurCourant = 'J1';
-      }
-      this.etat.nbCoupRestant = 3;
-    }
-    this.setEtat();
   }
 }

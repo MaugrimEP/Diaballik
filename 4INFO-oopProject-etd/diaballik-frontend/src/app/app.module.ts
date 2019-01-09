@@ -23,6 +23,9 @@ const appRoutes: Routes = [
   }, {
     path: 'load',
     component: LoadGameComponent
+  },{
+    path: 'replay-board',
+    component: ReplayBoardComponent
   },
   {
     path: '',
