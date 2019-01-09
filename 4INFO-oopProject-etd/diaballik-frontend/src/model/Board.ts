@@ -1,5 +1,5 @@
 import {Player} from './Player';
-import {fromEventPattern} from 'rxjs';
+import { Action } from './Action';
 
 export class Board {
 
@@ -12,6 +12,24 @@ export class Board {
         this.tiles[ligne][colonne] = new TileInfo(Pion.empty);
       }
     }
+  }
+
+  doAction(action:Action):void{
+    let tileInfoDepart = this.get(action._depart._ligne, action._depart._colonne);
+    let tileInfoArrive = this.get(action._arrivee._ligne, action._arrivee._colonne);
+
+    if (this.isBall(action._depart._ligne, action._depart._colonne)) {// isBall
+      this.addPion(action._arrivee._ligne, action._arrivee._colonne, Pion.ball, tileInfoDepart.player);
+      this.addPion(action._depart._ligne, action._depart._colonne, Pion.pion, tileInfoDepart.player);
+    } else {// isPion
+      this.set(action._arrivee._ligne, action._arrivee._colonne, tileInfoDepart);
+      this.set(action._depart._ligne, action._depart._colonne, tileInfoArrive);
+    }
+  }
+
+  undoAction(action:Action):void{
+    let actionReverse = new Action(action._arrivee, action._depart);
+    this.doAction(actionReverse);
   }
 
   get(ligne: number, colonne: number): TileInfo {

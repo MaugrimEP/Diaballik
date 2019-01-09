@@ -2,22 +2,18 @@ import {AfterContentInit, AfterViewChecked, AfterViewInit, Component, OnInit, Sk
 import {RequesterBackEndService} from '../../service/RequesterBackEnd.service';
 import {Player} from 'src/model/Player';
 import {Board, Pion, TileInfo} from 'src/model/Board';
-import {PlateauType} from 'src/model/PlateauType';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Transmetter} from '../../model/Transmetter';
 import {Etat} from '../../model/Etat';
-import {Observable} from 'rxjs';
 import {Coordonnee} from 'src/model/Coordonnee';
 import {Action} from 'src/model/Action';
-import {ResultOfAPlay} from 'src/model/ResultOfAPlay';
-import { unescapeIdentifier } from '@angular/compiler';
 
 @Component({
-  selector: 'app-board',
-  templateUrl: './board.component.html',
-  styleUrls: ['./board.component.css']
+  selector: 'app-replay-board',
+  templateUrl: './replay-board.component.html',
+  styleUrls: ['./replay-board.component.css']
 })
-export class BoardComponent implements AfterViewChecked {
+export class ReplayBoardComponent implements AfterViewChecked {
 
   joueur1: Player;
   joueur2: Player;
@@ -55,12 +51,10 @@ export class BoardComponent implements AfterViewChecked {
         return;
       }
 
-
       for (let action of listeActions) {
         this.board.doAction(action);
         this.updateAutomate();
       }
-
 
       this.updateTiles();
       if (resultOfAPlay.gameWon) {
@@ -149,7 +143,7 @@ export class BoardComponent implements AfterViewChecked {
   clickOnTile(ligne: number, colonne: number): void {
     const clickedSpan = this.getSpan(ligne, colonne);
     if (clickedSpan.classList.contains('choice') ||
-      this.somethingSelected() && this.board.isBall(this.selectedLigne, this.selectedColonne) && this.board.isPion(ligne, colonne) ) { // dans ce cas on est sur un des mouvements possible et dans ce cas on envoit au serveur
+      this.somethingSelected() && this.board.isBall(this.selectedLigne, this.selectedColonne)) { // dans ce cas on est sur un des mouvements possible et dans ce cas on envoit au serveur
       this.tryToPlay(this.selectedLigne, this.selectedColonne, ligne, colonne);
       console.log('coupe tenté');
       return;
@@ -157,8 +151,6 @@ export class BoardComponent implements AfterViewChecked {
     if (this.board.isEmpty(ligne, colonne)) {// l'utilisateur a cliqué sur une case vide dans ce cas on clear la liste des possibilitées
       console.log('clear possibilitées');
       this.clearPossibilty();
-      this.deselect(this.selectedLigne,this.selectedColonne);
-      this.selectedLigne = null;this.selectedColonne = null;
       return;
     }
     if (!this.board.isEmpty(ligne, colonne)) { // il faudra sélectioner la piece actuelle
@@ -201,9 +193,7 @@ export class BoardComponent implements AfterViewChecked {
   }
 
   deselect(ligne: number, colonne: number) {
-    if(this.somethingSelected()){
-      this.getSpan(ligne, colonne).classList.remove('selected');
-    }
+    this.getSpan(ligne, colonne).classList.remove('selected');
   }
 
   clearPossibilty() {

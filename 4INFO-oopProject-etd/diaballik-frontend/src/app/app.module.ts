@@ -10,6 +10,7 @@ import {LastGameComponent} from './last-game/last-game.component';
 import {RequesterBackEndService} from '../service/RequesterBackEnd.service';
 import {BoardComponent} from './board/board.component';
 import {LoadGameComponent} from './load-game/load-game.component';
+import { ReplayBoardComponent } from './replay-board/replay-board.component';
 
 const appRoutes: Routes = [
   {
@@ -37,7 +38,8 @@ const appRoutes: Routes = [
     MenuComponent,
     LastGameComponent,
     BoardComponent,
-    LoadGameComponent
+    LoadGameComponent,
+    ReplayBoardComponent
   ],
   imports: [
     RouterModule.forRoot(

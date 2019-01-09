@@ -42,6 +42,12 @@ export class LoadGameComponent implements OnInit {
   }
 
   replay() {
-
+    let response = this.requester.getGameRegistrered(this.date.getTime().toString());
+    response.then(infos => {
+      Transmetter.data = {
+        'infos': infos
+      };
+      this.router.navigate(['replay-board']);
+    });
   }
 }
