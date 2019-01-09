@@ -1,81 +1,105 @@
-<div id="last_games" class="navbar-right">
-  <app-last-game></app-last-game>
-</div>
-<div class="container" id="settings">
+<div class="container-fluid">
   <div class="row">
-    <div id="joueurs">
-      <div id="joueur1" class="form-horizontal col-md-3 col-lg-3 border">
+    <div class="col-md-9">
+        <div class="container-fluid" id="settings">
+            <div class="">
+              <div id="joueurs" class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Player 1</div>
+                        <div class="panel-body">
+                            <div id="joueur1" class="border">
 
-        <div class="form-group">
-          <label class="col-md-2 col-lg-2 control-label">Name</label>
-          <div class="col-md-10 col-lg-10">
-            <input type="text" name="joueur1_name" [(ngModel)]="joueur1.name"
-                   class="form-control" placeholder="example : Kibo Ryousukeke">
-          </div>
-        </div>
+                                <div class="form-group">
+                                  <label class="control-label">Name</label>
+                                  <div class="">
+                                    <input type="text" name="joueur1_name" [(ngModel)]="joueur1.name"
+                                           class="form-control" placeholder="example : Kibo Ryousukeke">
+                                  </div>
+                                </div>
+                        
+                                <div class="form-group">
+                                  <label class="control-label">Color</label>
+                                  <div class="">
+                                    <input type="color" name="joueur1_color" [(ngModel)]="joueur1.color"
+                                           [(value)]="joueur1.color" class="form-control">
+                                  </div>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Player 2</div>
+                        <div class="panel-body">
+                            <div id="joueur2" class="">
+          
+                                <div class="form-group">
+                                  <label class="control-label">Name</label>
+                                  <div class="">
+                                    <input type="text" name="joueur2_name" [(ngModel)]="joueur2.name"
+                                           class="form-control" placeholder="example : Maugrim le bg">
+                                  </div>
+                                </div>
+                        
+                                <div class="form-group">
+                                  <label class="control-label">Color</label>
+                                  <div class="">
+                                    <input type="color" name="joueur2_color" [(ngModel)]="joueur2.color" class="form-control">
+                                  </div>
+                                </div>
+                        
+                                <div class="form-group">
+                                  <div class="">
+                                    <div class="checkbox">
+                                      <label>
+                                        <input type="checkbox" name="ia_selected" [(ngModel)]="joueur2.typeIA"> IA
+                                      </label>
+                                    </div>
+                                  </div>
+                                </div>
+                        
+                                <div id="id_level">
+                                  <input type="radio" name="ia_level" [value]="IA_level.Noob" [(ngModel)]="joueur2.niveau_ia"
+                                         [disabled]="!joueur2.typeIA">
+                                  Noob
+                        
+                                  <input type="radio" name="ia_level" [value]="IA_level.Starting" [(ngModel)]="joueur2.niveau_ia"
+                                         [disabled]="!joueur2.typeIA">
+                                  Starting
+                        
+                                  <input type="radio" name="ia_level" [value]="IA_level.Progressive" [(ngModel)]="joueur2.niveau_ia"
+                                         [disabled]="!joueur2.typeIA"> Progressive
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="form-group">
-          <label class="col-md-2 col-lg-2 control-label">Color</label>
-          <div class="col-md-10 col-lg-10">
-            <input type="color" name="joueur1_color" [(ngModel)]="joueur1.color"
-                   [(value)]="joueur1.color" class="form-control">
-          </div>
-        </div>
-      </div>
 
+          
+          
 
-      <div id="joueur2" class="form-horizontal col-md-3 col-lg-3">
-
-        <div class="form-group">
-          <label class="col-md-2 col-lg-2 control-label">Name</label>
-          <div class="col-md-10 col-lg-10">
-            <input type="text" name="joueur2_name" [(ngModel)]="joueur2.name"
-                   class="form-control" placeholder="example : Maugrim le bg">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="col-md-2 col-lg-2 control-label">Color</label>
-          <div class="col-md-10 col-lg-10">
-            <input type="color" name="joueur2_color" [(ngModel)]="joueur2.color" class="form-control">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div class="col-md-offset-2 col-md-10 col-lg-10">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" name="ia_selected" [(ngModel)]="joueur2.typeIA" class="form-control"> IA
-              </label>
+              </div>
+            </div>
+          
+            <div class="row">
+          
+              <div id="game_scenario" class="light-text">
+                <input type="radio" name="scenario" [value]="Scenario.Standard" [(ngModel)]="scenario" checked> Standard
+                <input type="radio" name="scenario" [value]="Scenario.Random" [(ngModel)]="scenario"> Random
+                <input type="radio" name="scenario" [value]="Scenario.Enemy" [(ngModel)]="scenario"> Enemy
+              </div>
             </div>
           </div>
-        </div>
-
-        <div id="id_level">
-          <input type="radio" name="ia_level" [value]="IA_level.Noob" [(ngModel)]="joueur2.niveau_ia"
-                 [disabled]="!joueur2.typeIA">
-          Noob
-
-          <input type="radio" name="ia_level" [value]="IA_level.Starting" [(ngModel)]="joueur2.niveau_ia"
-                 [disabled]="!joueur2.typeIA">
-          Starting
-
-          <input type="radio" name="ia_level" [value]="IA_level.Progressive" [(ngModel)]="joueur2.niveau_ia"
-                 [disabled]="!joueur2.typeIA"> Progressive
-        </div>
-      </div>
+          <button (click)="startNewGame()" class="btn btn-primary" id="start_game">Start Game</button>
+          <!--<button (click)="testPlay()" id="play">Play</button>-->
+          <!--<button id="testid" (click)="testFunction()">Test Button</button>-->
     </div>
-  </div>
-
-  <div class="row">
-
-    <div id="game_scenario">
-      <input type="radio" name="scenario" [value]="Scenario.Standard" [(ngModel)]="scenario" checked> Standard
-      <input type="radio" name="scenario" [value]="Scenario.Random" [(ngModel)]="scenario"> Random
-      <input type="radio" name="scenario" [value]="Scenario.Enemy" [(ngModel)]="scenario"> Enemy
+    <div class="col-md-3">
+        <app-last-game></app-last-game>
     </div>
   </div>
 </div>
-<button (click)="startNewGame()" id="start_game">Start Game</button>
-<!--<button (click)="testPlay()" id="play">Play</button>-->
-<!--<button id="testid" (click)="testFunction()">Test Button</button>-->
+

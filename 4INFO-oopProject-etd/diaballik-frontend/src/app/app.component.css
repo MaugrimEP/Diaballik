@@ -1,0 +1,9 @@
+.dark-body {
+    background: #333;
+    padding: 1em;
+}
+
+h1,
+.light-text {
+    color: white;
+}
